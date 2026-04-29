@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html lang="en" dir="auto" data-theme="auto">
 
-<head><meta charset="utf-8">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="robots" content="index, follow">
+<meta name="robots" content="noindex, nofollow">
 <title>Lecture 2: Convexity, Geometry, and Differentiability in Optimization | Avi | Personal Website</title>
 <meta name="keywords" content="">
 <meta name="description" content="Introduces convex sets and functions, their geometric interpretation via level sets, and fundamental differentiability concepts (Fréchet and directional derivatives), highlighting their role in understanding optimization structure and behavior.">
 <meta name="author" content="">
-<link rel="canonical" href="https://avi48437.github.io/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-02/">
+<link rel="canonical" href="http://localhost:1313/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-02/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.343cc480b9ffc8f04ccbe5e968ad674880cab773ec19905e93033065c1e7a804.css" integrity="sha256-NDzEgLn/yPBMy&#43;XpaK1nSIDKt3PsGZBekwMwZcHnqAQ=" rel="preload stylesheet" as="style">
-<link rel="icon" href="https://avi48437.github.io/favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="https://avi48437.github.io/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="https://avi48437.github.io/favicon-32x32.png">
-<link rel="apple-touch-icon" href="https://avi48437.github.io/apple-touch-icon.png">
-<link rel="mask-icon" href="https://avi48437.github.io/safari-pinned-tab.svg">
+<link rel="icon" href="http://localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" hreflang="en" href="https://avi48437.github.io/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-02/">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-02/">
 <noscript>
     <style>
         #theme-toggle,
@@ -177,80 +177,14 @@
 </script>
 
 
-<meta property="og:url" content="https://avi48437.github.io/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-02/">
-  <meta property="og:site_name" content="Avi | Personal Website">
-  <meta property="og:title" content="Lecture 2: Convexity, Geometry, and Differentiability in Optimization">
-  <meta property="og:description" content="Introduces convex sets and functions, their geometric interpretation via level sets, and fundamental differentiability concepts (Fréchet and directional derivatives), highlighting their role in understanding optimization structure and behavior.">
-  <meta property="og:locale" content="en-us">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="notes">
-    <meta property="article:published_time" content="2026-01-10T00:00:00+00:00">
-    <meta property="article:modified_time" content="2026-01-10T00:00:00+00:00">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Lecture 2: Convexity, Geometry, and Differentiability in Optimization">
-<meta name="twitter:description" content="Introduces convex sets and functions, their geometric interpretation via level sets, and fundamental differentiability concepts (Fréchet and directional derivatives), highlighting their role in understanding optimization structure and behavior.">
 
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    {
-      "@type": "ListItem",
-      "position":  1 ,
-      "name": "Notes",
-      "item": "https://avi48437.github.io/notes/"
-    }, 
-    {
-      "@type": "ListItem",
-      "position":  4 ,
-      "name": "Lecture 2: Convexity, Geometry, and Differentiability in Optimization",
-      "item": "https://avi48437.github.io/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-02/"
-    }
-  ]
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "Lecture 2: Convexity, Geometry, and Differentiability in Optimization",
-  "name": "Lecture 2: Convexity, Geometry, and Differentiability in Optimization",
-  "description": "Introduces convex sets and functions, their geometric interpretation via level sets, and fundamental differentiability concepts (Fréchet and directional derivatives), highlighting their role in understanding optimization structure and behavior.",
-  "keywords": [
-    
-  ],
-  "articleBody": "Convex Sets and Convex Function Definition 1.1: Convex Set A set $\\Theta \\subset \\R^n$ is convex if for $\\theta_1,\\theta_2\\in \\Theta$ and for all $\\lambda\\in (0,1)$, $$ (1-\\lambda)\\theta_1+\\lambda\\theta_2\\in \\Theta $$ Example 1.1: Hyperplanes are convex Let $\\Theta=\\lbrace \\theta: a^T\\theta=b\\rbrace$, Prove that $\\Theta$ is convex.\nLet $\\theta_1,\\theta_2 \\in \\Theta$. Therefore, $a^T\\theta_1=b$ and $a^T\\theta_2=b$. Take $\\lambda \\in (0,1)$. $\\therefore$ $a^T((1-\\lambda)\\theta_1+\\lambda\\theta_2)=(1-\\lambda)b+\\lambda b=b$. Hence, $((1-\\lambda)\\theta_1+\\lambda\\theta_2)\\in \\Theta$. So, $\\Theta$ is convex.\nDefinition 1.2: Convex function Let $\\Theta$ be convex. Let $f:\\Theta \\rightarrow \\R$ be a differentiable function. Then $f$ is convex if $\\forall \\theta_1,\\theta_2\\in \\Theta$, $\\lambda\\in (0,1)$, $$ f(\\lambda\\theta_1+(1-\\lambda)\\theta_2)\\le \\lambda f(\\theta_1)+(1-\\lambda)f(\\theta_2) $$\nAn equivalent definition can be given. With $\\Theta$ convex and $f$ differentiable, $f$ is convex iff $f(\\theta_2)\\ge f(\\theta_1)+\\nabla f(\\theta_1)^T(\\theta_2-\\theta_1)$\nProof of the first order characterization $\\Rightarrow$\nWe know that $\\forall \\quad \\theta_1,\\theta_2\\in\\Theta$ and $\\lambda\\in(0,1)$, we have the following $$ \\begin{aligned} \u0026 \\lambda f(\\theta_2)+(1-\\lambda)f(\\theta_1)\\ge f(\\lambda\\theta_2+(1-\\lambda)\\theta_1)\\\\ \\implies \u0026 \\lambda(f(\\theta_2)-f(\\theta_1))\\ge f(\\lambda\\theta_2+(1-\\lambda)\\theta_1)-f(\\theta_1)\\\\ \\implies \u0026 \\lambda(f(\\theta_2)-f(\\theta_1))\\ge f(\\theta_1+\\lambda(\\theta_2-\\theta_1))-f(\\theta_1)\\\\ \\implies \u0026 f(\\theta_2)-f(\\theta_1)\\ge \\frac{f(\\theta_1+\\lambda(\\theta_2-\\theta_1))-f(\\theta_1)}{\\lambda}\\\\ \\implies \u0026 f(\\theta_2)-f(\\theta_1)\\ge ||\\theta_2-\\theta_1||_2\\underbrace{\\left(\\frac{f(\\theta_1+\\lambda(\\theta_2-\\theta_1))-f(\\theta_1)-\\nabla f(\\theta_1)^T(\\theta_2-\\theta_1)}{\\lambda||\\theta_2-\\theta_1||_2}\\right)}_{\\rightarrow 0 \\text{ as }\\lambda\\rightarrow 0}\\\\ \u0026\\hspace{12em}+\\nabla f(\\theta_1)^T(\\theta_2-\\theta_1) \\end{aligned} $$ Therefore, we have the desired result.\n$\\Leftarrow$ Let, $\\theta_1,\\theta_2\\in \\Theta$. Then we are given that $f(\\theta_2)\\ge f(\\theta_1)+\\nabla f(\\theta_1)^T(\\theta_2-\\theta_1)$.\nLet, $\\theta_{\\lambda}=(1-\\lambda)\\theta_1+\\lambda\\theta_2$, when $\\lambda\\in (0,1)$ is fixed.Then, we can say that $$ \\begin{aligned} \u0026 f(\\theta_1)\\ge f(\\theta_{\\lambda})+\\nabla f(\\theta_{\\lambda}) (\\theta_1-\\theta_{\\lambda})\\\\ \u0026 f(\\theta_2)\\ge f(\\theta_{\\lambda})+\\nabla f(\\theta_{\\lambda})(\\theta_2-\\theta_{\\lambda})\\\\ \\therefore \u0026 \\lambda f(\\theta_1)+(1-\\lambda)f(\\theta_2)\\ge f(\\theta_{\\lambda})+\\nabla f(\\theta_1)^T((1-\\lambda)\\theta_1+\\lambda\\theta_2-\\theta_{\\lambda})\\\\ \\therefore \u0026 \\lambda f(\\theta_1)+(1-\\lambda)f(\\theta_2)\\ge f((1-\\lambda)\\theta_1+\\lambda\\theta_2) \\end{aligned} $$ Therefore, $f$ is convex.\n□ Next we define the Level Sets, which will be useful to find an equivalent definition of the optimization problem;\nLevel Sets Definition 1.3: Level Sets Let $f: \\Theta\\rightarrow \\R$. For $c\\in \\R$, define the level set $L_{c}(f)=\\{\\theta\\in \\Theta:\\enspace f(\\theta)=c \\}$ and the sublevel set $L^s_c(t)=\\{\\theta \\in \\Theta:\\enspace f(\\theta)\\le c\\}$. Then, it can be seen easily that $$ \\min_{\\theta\\in \\Theta}f(\\theta) \\Leftrightarrow \\argmin_{c\\in \\R} \\{c:\\enspace L_c(f)\\neq \\phi\\} $$ Theorem 1.1 If $f$ is convex, then $L_c^s(f)$ are also convex $\\forall c$. The idea of the level sets is to provide the geometric intuition underlying curvature.\nround level sets $\\implies$ curvature of $f$ is similar in all directions $\\rightarrow$ well conditioned function.\nelongated level sets $\\implies$ curvature is steep in some directions and flat in others. $\\rightarrow$ ill conditioned function.\nExample 1.2: Ill conditioned function Consider the function $f:\\R^2\\rightarrow \\R$ such that $f(\\theta)=\\theta_1^2+100\\theta_2^2$ Differentiability Definition 1.4: Frechet Differentiability A function $f:\\R^p\\rightarrow \\R$ is Frechet differentiable at $\\theta$ if there exists a vector $g\\in \\R^p$ such that $$ \\lim_{h\\rightarrow 0}\\frac{f(\\theta+h)-f(\\theta)-g^Th}{||h||_2}=0 $$ and we denote this $g$ as $\\nabla f(\\theta)$. Example 1.3: Quadratic function $f(\\theta)=\\frac{1}{2}\\theta^TA\\theta+b^T\\theta$ such that $A=A^T$ Now, $f(\\theta+h)=\\frac{1}{2}(\\theta+h)^TA(\\theta+h)+b^T\\theta=f(\\theta)+\\theta^TAh+\\frac{1}{2}h^TAh+b^Th$. Therefore we have\n$$ \\frac{f(\\theta+h)-f(\\theta)-(\\theta^TA+b^T)h}{||h||_2}=\\frac{h^TAh}{2||h||_2} $$\nNote, that we can diagonalize $A$ as $A=Q\\Lambda Q^T$, where $Q$ is a orthonormal matrix comprised of the eigenvectors corresponding to the eigenvalues of $A$ and $\\Lambda$ is a diagonal matrix containing the eigenvalues. Hence, $$ \\begin{aligned} \u0026 h^TAh=h^TQ\\Lambda Q^Th\\le \\lambda_{\\max}(A)||h||_2^2\\\\ \\implies \u0026 \\frac{f(\\theta+h)-f(\\theta)-(\\theta^TA+b^T)h}{||h||_2}=o(||h||_2) \\end{aligned} $$ Therefore, we have that $f$ is Frechet differentiable and $\\nabla f(\\theta)=A\\theta+b$.\nIn the next example, we shall show that $l_1$ norm is convex but not Frechet-Differentiable.\nExample 1.4: $l_1$ norm is convex but not Frechet Differentiable We need to prove that $f(\\theta)=||\\theta||_1$ is not Frechet Differentiable.\nLet’s assume that it is Frechet Differentiable at $\\theta\\in \\Theta$. Then there exists a $g\\in \\R^p$ such that $$ \\begin{aligned} \u0026 \\frac{\\sum_{i=1}^p(|\\theta_i+h_i|-|\\theta_i|)-g^Th}{||h||_2}\\xrightarrow{h\\rightarrow 0} 0 \\\\ \\implies \u0026 \\sum_{i=1}^p (|\\theta_i+h_i|-|\\theta_i|)=g^Th+o(||h||_2) \\end{aligned} $$ Take $h=te_j$. Therefore, we will have that $$ |\\theta_j+t|-|\\theta_j|=tg^Te_j+o(|t|) $$ Now take $\\theta_j=0$. Then we will have $$ \\operatorname{sign}(t)=g^Te_j+\\frac{o(|t|)}{t} $$ As the limit of the $LHS$ does not exists at $t=0$, $g$ can not exist. Hence $f$ is not Frechet Differentiable.\nNex, we will discuss the concept of directional derivative to tackle situations like Example 1.5\nDefinition 1.5: Directional Derivative For a direction $v\\in \\R^p$, the directional derivative of $f$, at $\\theta$ in direction $v$ is $$ D_vf(\\theta)=\\lim{t\\downarrow 0}\\frac{f(\\theta+tv)-f(\\theta)}{t} $$ The next result shows that the Frechet Differentiability implies the directional derivative. Proposition 1.1 If $f$ is Frechet Differentiable at $\\theta$, then for all $v\\in \\R^p$ $$ D_vf(\\theta)=\\nabla f(\\theta)^Tv $$ Proof. By definition of Frechet Differentiability, we have the following that $$ f(\\theta+h)-f(\\theta)=\\nabla f(\\theta)^Th+o(||h||_2) $$ Substitute $h=tv$ and we will get $$ \\begin{aligned} \u0026 f(\\theta+tv)-f(\\theta)=t\\nabla f(\\theta)^Tv+o(||tv||_2)\\\\ \\therefore \\enspace \u0026 \\frac{f(\\theta+tv)-f(\\theta)}{t}=\\nabla f(\\theta)^Tv+\\frac{o(|t|)}{t} \\end{aligned} $$ Take $t\\downarrow 0$ to get $D_vf(\\theta)=\\nabla f(\\theta)^Tv$. □ ",
-  "wordCount" : "689",
-  "inLanguage": "en",
-  "datePublished": "2026-01-10T00:00:00Z",
-  "dateModified": "2026-01-10T00:00:00Z",
-  "author":[{
-    "@type": "Person",
-    "name": {"name":"Avinandan Roy"}
-  }],
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://avi48437.github.io/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-02/"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "Avi | Personal Website",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://avi48437.github.io/favicon.ico"
-    }
-  }
-}
-</script>
 </head>
 <body id="top">
     <header class="header">
     <nav class="nav">
         <div class="logo">
-            <a href="https://avi48437.github.io/" accesskey="h" title="Avinandan Roy (Alt + H)">
-                <img src="https://avi48437.github.io/images/profile.jpg" alt="" aria-label="logo"
+            <a href="http://localhost:1313/" accesskey="h" title="Avinandan Roy (Alt + H)">
+                <img src="http://localhost:1313/images/profile.jpg" alt="" aria-label="logo"
                     height="30">Avinandan Roy</a>
             <div class="logo-switches">
                 <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
@@ -277,37 +211,37 @@
         </div>
         <ul id="menu">
             <li>
-                <a href="https://avi48437.github.io/bio/" title="Bio">
+                <a href="http://localhost:1313/bio/" title="Bio">
                     <span>Bio</span>
                 </a>
             </li>
             <li>
-                <a href="https://avi48437.github.io/notes/" title="Notes">
+                <a href="http://localhost:1313/notes/" title="Notes">
                     <span>Notes</span>
                 </a>
             </li>
             <li>
-                <a href="https://avi48437.github.io/blogs/" title="Blogs">
+                <a href="http://localhost:1313/blogs/" title="Blogs">
                     <span>Blogs</span>
                 </a>
             </li>
             <li>
-                <a href="https://avi48437.github.io/links/" title="Links">
+                <a href="http://localhost:1313/links/" title="Links">
                     <span>Links</span>
                 </a>
             </li>
             <li>
-                <a href="https://avi48437.github.io/travel/" title="Travel">
+                <a href="http://localhost:1313/travel/" title="Travel">
                     <span>Travel</span>
                 </a>
             </li>
             <li>
-                <a href="https://avi48437.github.io/contact/" title="Contact">
+                <a href="http://localhost:1313/contact/" title="Contact">
                     <span>Contact</span>
                 </a>
             </li>
             <li>
-                <a href="https://avi48437.github.io/papers/" title="Paper Summary">
+                <a href="http://localhost:1313/papers/" title="Paper Summary">
                     <span>Paper Summary</span>
                 </a>
             </li>
@@ -989,7 +923,7 @@ $$ Take $t\downarrow 0$ to get $D_vf(\theta)=\nabla f(\theta)^Tv$.
     </main>
     
 <footer class="footer">
-        <span>&copy; 2026 <a href="https://avi48437.github.io/">Avi | Personal Website</a></span> · 
+        <span>&copy; 2026 <a href="http://localhost:1313/">Avi | Personal Website</a></span> · 
 
     <span>
         Powered by

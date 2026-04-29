@@ -2,31 +2,31 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Advanced Statistical Computing II on Avi | Personal Website</title>
-    <link>https://avi48437.github.io/notes/washu-spring-semester/advanced-statistical-computing-ii/</link>
+    <link>http://localhost:1313/notes/washu-spring-semester/advanced-statistical-computing-ii/</link>
     <description>Recent content in Advanced Statistical Computing II on Avi | Personal Website</description>
     <generator>Hugo -- 0.154.3</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 10 Jan 2026 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://avi48437.github.io/notes/washu-spring-semester/advanced-statistical-computing-ii/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/notes/washu-spring-semester/advanced-statistical-computing-ii/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Lecture 1: Optimization Basics and Existence of Solutions</title>
-      <link>https://avi48437.github.io/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-01/</link>
+      <link>http://localhost:1313/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-01/</link>
       <pubDate>Sat, 10 Jan 2026 00:00:00 +0000</pubDate>
-      <guid>https://avi48437.github.io/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-01/</guid>
+      <guid>http://localhost:1313/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-01/</guid>
       <description>Defines optimization problems and key concepts (global/local minima, stationary points), and gives conditions—via lower semicontinuity, compactness, or coercivity—under which minimizers exist, with implications for statistical estimation and algorithms.</description>
     </item>
     <item>
       <title>Lecture 2: Convexity, Geometry, and Differentiability in Optimization</title>
-      <link>https://avi48437.github.io/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-02/</link>
+      <link>http://localhost:1313/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-02/</link>
       <pubDate>Sat, 10 Jan 2026 00:00:00 +0000</pubDate>
-      <guid>https://avi48437.github.io/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-02/</guid>
+      <guid>http://localhost:1313/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-02/</guid>
       <description>Introduces convex sets and functions, their geometric interpretation via level sets, and fundamental differentiability concepts (Fréchet and directional derivatives), highlighting their role in understanding optimization structure and behavior.</description>
     </item>
     <item>
       <title>Lecture 3: Gradient Geometry and Iterative Optimization</title>
-      <link>https://avi48437.github.io/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-03/</link>
+      <link>http://localhost:1313/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-03/</link>
       <pubDate>Sat, 10 Jan 2026 00:00:00 +0000</pubDate>
-      <guid>https://avi48437.github.io/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-03/</guid>
+      <guid>http://localhost:1313/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-03/</guid>
       <description>Explains the geometric role of gradients as directions of steepest ascent/descent, their relation to level sets, and motivates iterative optimization via local linear approximations and descent methods.</description>
     </item>
   </channel>

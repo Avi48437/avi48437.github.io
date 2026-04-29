@@ -2,52 +2,52 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Avinandan Roy on Avi | Personal Website</title>
-    <link>https://avi48437.github.io/</link>
+    <link>http://localhost:1313/</link>
     <description>Recent content in Avinandan Roy on Avi | Personal Website</description>
     <generator>Hugo -- 0.154.3</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 19 Apr 2026 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://avi48437.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Girsanov Theorem</title>
-      <link>https://avi48437.github.io/notes/short-notes/girsanov-theorem/</link>
+      <link>http://localhost:1313/notes/short-notes/girsanov-theorem/</link>
       <pubDate>Sun, 19 Apr 2026 00:00:00 +0000</pubDate>
-      <guid>https://avi48437.github.io/notes/short-notes/girsanov-theorem/</guid>
+      <guid>http://localhost:1313/notes/short-notes/girsanov-theorem/</guid>
       <description>A full report on the Girsanov Theorem.</description>
     </item>
     <item>
       <title>Lecture 1: Modes of Convergence</title>
-      <link>https://avi48437.github.io/notes/washu-spring-semester/theory-of-statistics-ii/lecture-01/</link>
+      <link>http://localhost:1313/notes/washu-spring-semester/theory-of-statistics-ii/lecture-01/</link>
       <pubDate>Sat, 10 Jan 2026 00:00:00 +0000</pubDate>
-      <guid>https://avi48437.github.io/notes/washu-spring-semester/theory-of-statistics-ii/lecture-01/</guid>
+      <guid>http://localhost:1313/notes/washu-spring-semester/theory-of-statistics-ii/lecture-01/</guid>
       <description>Introduces almost sure convergence, convergence in probability, convergence in distribution, and the relations among them.</description>
     </item>
     <item>
       <title>Lecture 1: Optimization Basics and Existence of Solutions</title>
-      <link>https://avi48437.github.io/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-01/</link>
+      <link>http://localhost:1313/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-01/</link>
       <pubDate>Sat, 10 Jan 2026 00:00:00 +0000</pubDate>
-      <guid>https://avi48437.github.io/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-01/</guid>
+      <guid>http://localhost:1313/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-01/</guid>
       <description>Defines optimization problems and key concepts (global/local minima, stationary points), and gives conditions—via lower semicontinuity, compactness, or coercivity—under which minimizers exist, with implications for statistical estimation and algorithms.</description>
     </item>
     <item>
       <title>Lecture 2: Convexity, Geometry, and Differentiability in Optimization</title>
-      <link>https://avi48437.github.io/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-02/</link>
+      <link>http://localhost:1313/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-02/</link>
       <pubDate>Sat, 10 Jan 2026 00:00:00 +0000</pubDate>
-      <guid>https://avi48437.github.io/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-02/</guid>
+      <guid>http://localhost:1313/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-02/</guid>
       <description>Introduces convex sets and functions, their geometric interpretation via level sets, and fundamental differentiability concepts (Fréchet and directional derivatives), highlighting their role in understanding optimization structure and behavior.</description>
     </item>
     <item>
       <title>Lecture 3: Gradient Geometry and Iterative Optimization</title>
-      <link>https://avi48437.github.io/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-03/</link>
+      <link>http://localhost:1313/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-03/</link>
       <pubDate>Sat, 10 Jan 2026 00:00:00 +0000</pubDate>
-      <guid>https://avi48437.github.io/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-03/</guid>
+      <guid>http://localhost:1313/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-03/</guid>
       <description>Explains the geometric role of gradients as directions of steepest ascent/descent, their relation to level sets, and motivates iterative optimization via local linear approximations and descent methods.</description>
     </item>
     <item>
       <title>Nonparametric Regression Model with Tree-structured Response</title>
-      <link>https://avi48437.github.io/papers/nonparametric-regression-model-with-tree-structured-response/</link>
+      <link>http://localhost:1313/papers/nonparametric-regression-model-with-tree-structured-response/</link>
       <pubDate>Sat, 10 Jan 2026 00:00:00 +0000</pubDate>
-      <guid>https://avi48437.github.io/papers/nonparametric-regression-model-with-tree-structured-response/</guid>
+      <guid>http://localhost:1313/papers/nonparametric-regression-model-with-tree-structured-response/</guid>
       <description>&lt;p&gt;The goal of this paper is to study the regression on tree-structured data as response with age as the input variable, which is one kind of object oriented data and the analysis of this is called the &lt;em&gt;Object Oriented Data Analysis&lt;/em&gt; (OODA). Aydın et al. (&lt;a href=&#34;#ref-Aydin2009PCA&#34;&gt;2009&lt;/a&gt;) took OODA on trees further by studying the dependence of the &lt;strong&gt;principal component scores&lt;/strong&gt; on &lt;strong&gt;age&lt;/strong&gt; through a &lt;strong&gt;simple linear regression analysis&lt;/strong&gt;. The authors of this paper has generalized the notion of the locally weighted smoother to the tree space. The approach is a particular optimization problem and an efficient algorithm with &lt;strong&gt;linear time&lt;/strong&gt; has been proposed for a complete solution. This paper addresses the relationship of the human brain artery trees with age.&lt;/p&gt;</description>
     </item>
   </channel>

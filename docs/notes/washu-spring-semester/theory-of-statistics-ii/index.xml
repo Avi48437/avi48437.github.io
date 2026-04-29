@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Theory of Statistics II on Avi | Personal Website</title>
-    <link>https://avi48437.github.io/notes/washu-spring-semester/theory-of-statistics-ii/</link>
+    <link>http://localhost:1313/notes/washu-spring-semester/theory-of-statistics-ii/</link>
     <description>Recent content in Theory of Statistics II on Avi | Personal Website</description>
     <generator>Hugo -- 0.154.3</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 10 Jan 2026 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://avi48437.github.io/notes/washu-spring-semester/theory-of-statistics-ii/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/notes/washu-spring-semester/theory-of-statistics-ii/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Lecture 1: Modes of Convergence</title>
-      <link>https://avi48437.github.io/notes/washu-spring-semester/theory-of-statistics-ii/lecture-01/</link>
+      <link>http://localhost:1313/notes/washu-spring-semester/theory-of-statistics-ii/lecture-01/</link>
       <pubDate>Sat, 10 Jan 2026 00:00:00 +0000</pubDate>
-      <guid>https://avi48437.github.io/notes/washu-spring-semester/theory-of-statistics-ii/lecture-01/</guid>
+      <guid>http://localhost:1313/notes/washu-spring-semester/theory-of-statistics-ii/lecture-01/</guid>
       <description>Introduces almost sure convergence, convergence in probability, convergence in distribution, and the relations among them.</description>
     </item>
   </channel>

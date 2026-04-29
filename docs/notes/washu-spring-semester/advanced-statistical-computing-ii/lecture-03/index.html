@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html lang="en" dir="auto" data-theme="auto">
 
-<head><meta charset="utf-8">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="robots" content="index, follow">
+<meta name="robots" content="noindex, nofollow">
 <title>Lecture 3: Gradient Geometry and Iterative Optimization | Avi | Personal Website</title>
 <meta name="keywords" content="">
 <meta name="description" content="Explains the geometric role of gradients as directions of steepest ascent/descent, their relation to level sets, and motivates iterative optimization via local linear approximations and descent methods.">
 <meta name="author" content="">
-<link rel="canonical" href="https://avi48437.github.io/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-03/">
+<link rel="canonical" href="http://localhost:1313/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-03/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.343cc480b9ffc8f04ccbe5e968ad674880cab773ec19905e93033065c1e7a804.css" integrity="sha256-NDzEgLn/yPBMy&#43;XpaK1nSIDKt3PsGZBekwMwZcHnqAQ=" rel="preload stylesheet" as="style">
-<link rel="icon" href="https://avi48437.github.io/favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="https://avi48437.github.io/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="https://avi48437.github.io/favicon-32x32.png">
-<link rel="apple-touch-icon" href="https://avi48437.github.io/apple-touch-icon.png">
-<link rel="mask-icon" href="https://avi48437.github.io/safari-pinned-tab.svg">
+<link rel="icon" href="http://localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" hreflang="en" href="https://avi48437.github.io/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-03/">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-03/">
 <noscript>
     <style>
         #theme-toggle,
@@ -177,80 +177,14 @@
 </script>
 
 
-<meta property="og:url" content="https://avi48437.github.io/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-03/">
-  <meta property="og:site_name" content="Avi | Personal Website">
-  <meta property="og:title" content="Lecture 3: Gradient Geometry and Iterative Optimization">
-  <meta property="og:description" content="Explains the geometric role of gradients as directions of steepest ascent/descent, their relation to level sets, and motivates iterative optimization via local linear approximations and descent methods.">
-  <meta property="og:locale" content="en-us">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="notes">
-    <meta property="article:published_time" content="2026-01-10T00:00:00+00:00">
-    <meta property="article:modified_time" content="2026-01-10T00:00:00+00:00">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Lecture 3: Gradient Geometry and Iterative Optimization">
-<meta name="twitter:description" content="Explains the geometric role of gradients as directions of steepest ascent/descent, their relation to level sets, and motivates iterative optimization via local linear approximations and descent methods.">
 
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    {
-      "@type": "ListItem",
-      "position":  1 ,
-      "name": "Notes",
-      "item": "https://avi48437.github.io/notes/"
-    }, 
-    {
-      "@type": "ListItem",
-      "position":  4 ,
-      "name": "Lecture 3: Gradient Geometry and Iterative Optimization",
-      "item": "https://avi48437.github.io/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-03/"
-    }
-  ]
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "Lecture 3: Gradient Geometry and Iterative Optimization",
-  "name": "Lecture 3: Gradient Geometry and Iterative Optimization",
-  "description": "Explains the geometric role of gradients as directions of steepest ascent/descent, their relation to level sets, and motivates iterative optimization via local linear approximations and descent methods.",
-  "keywords": [
-    
-  ],
-  "articleBody": "Gradient geometry: steepest ascent and descent Once a gradient exists, we can ask a more refined geometric question:\nAmong all directions of a fixed length, which direction increases the function the fastest?\nTheorem 1.1: Cauchy-Schwartz inequality For any vectors $x,y\\in \\R^p$, we have $$ |x^Ty|\\le ||x||_2||y||_2 $$ Moreover equality holds if and only if $x$ and $y$ are linearly dependent which is to say that $x=\\lambda y$ for some scalar $\\lambda\\in \\R$. To isolate direction rather than scale, we restrict attention to unit vectors. Theorem 1.2: Gradient vectors as steepest ascent Let, $f$ be differentiable at $\\theta$. Among all directions $v$, with $||v||_2=1$, $$ \\max\\limits_{||v||_2=1}\\nabla f(\\theta)^Tv=||\\nabla f(\\theta)||_2 $$ and the maximizer is $u=\\frac{\\nabla f(\\theta)}{||f(\\theta)||_2}$ when $\\nabla f(\\theta)\\neq 0$ Proof. By Cauchy Schwartz inequality we will have $$ \\nabla f(\\theta)^Tv\\le ||\\nabla f(\\theta)||_2\\underbrace{||v||_2}_{=1}=||\\nabla f(\\theta)||_2 $$ □ This above theorem essentially tells us that the gradient points in the direction of the maximal instantaneous increase of the function and the magnitude $||\\nabla f(\\theta)||_2$ is the maximal rate of increase per unit step.\nSteepest descent direction While finding the minimizer of an objective function, we want steepest decrease and that’s why the direction of the steepest decrease is the negative gradient $-\\nabla f(\\theta)$. his is the fundamental geometric justification for gradient descent updates of the form $$ \\theta^{(k+1)}=\\theta^{(k)}-\\eta_k\\nabla f(\\theta^{(k)}) $$\nConnection to level sets Level sets provide a geometric interpretation of gradients and directional derivatives. Let $ f : \\mathbb{R}^p \\rightarrow \\mathbb{R} $ be a differentiable function.\nThe level set of $ f $ at height $ c $ is defined as $$ \\mathcal{L}_c = \\{ \\theta \\in \\mathbb{R}^p : f(\\theta) = c \\}. $$\nIntuitively, a level set consists of all points in parameter space where the function takes the same value. Moving along a level set does not change the value of the function.\nLet $\\theta(t)$ be a smooth curve that lies entirely on a level set $\\mathcal{L}_c$. Then $$ f(\\theta(t)) \\equiv c \\quad \\text{for all } t. $$ Differentiating both sides with respect to $ t $ and applying the multivariable chain rule gives $$ \\frac{d}{dt} f(\\theta(t)) = \\nabla f(\\theta(t))^\\top \\theta’(t) = 0. $$\nThis equation holds for any smooth curve tangent to the level set. Therefore, the gradient $\\nabla f(\\theta)$ is orthogonal to every tangent direction $\\theta’(t)$ along the level set. In other words, the gradient is normal (perpendicular) to the level set at $\\theta$. This geometric fact describes that moving along the level set produces no change in the function value, so the direction of maximum increase must be perpendicular to it.\nLocal Linear Models and Descent In nearly all statistical objectives, the minimizer cannot be written in closed form. Even when $f$ is convex, the equation defining an optimum (e.g. $\\nabla f(\\theta)=0$) may not admit an analytic solution, and solving it exactly can be as hard as the original problem. This motivates iterative algorithms: procedures that generate a sequence $\\{\\theta^{(k)}\\}_{k\\ge 0}$ intended to converge to a solution.\nDefinition 1.1: Iterative optimization algorithm An iterative optimization algorithm is a rule that generates a sequence $\\{\\theta^{(k)}\\}_{k\\ge 0}$ according to $$ \\theta^{(k+1)}=\\mathcal{A}(\\theta^{(k)}; \\text{ information about } f\\text{ near }\\theta^{(k)}), $$ where $\\mathcal{A}$ is the update map. Why are iterative optimization algorithms local ? In practice we don’t know how $f$ behaves across the global landscape $\\Theta$. Start with $\\theta^{(k)}$, we can often calculate $f(\\theta^{(k)})$. $\\nabla f(\\theta^{(k)})$: we often can compute or approx. Linearization as a principled local surrogate First, recall the implication of a function being Fréchet differentiable.\nLet $f : \\mathbb{R}^p \\to \\mathbb{R}$ be Fréchet differentiable at $\\theta$. By definition, there exists a gradient $\\nabla f(\\theta)$ and a remainder term $r_\\theta(h)$ such that\n$$ f(\\theta + h) = f(\\theta) + \\nabla f(\\theta)^\\top h + r_\\theta(h), \\text{ with } \\frac{r_\\theta(h)}{||h||_2} \\to 0 \\quad \\text{as } h \\to 0. $$\nEquivalently, for every $\\epsilon \u003e 0$ there exists $\\delta \u003e 0$ such that\n$$ |f(\\theta+h)-f(\\theta)-\\nabla f(\\theta)^T h| \\le \\epsilon ||h||_2\\text{ whenever } ||h||_2 \\le \\delta. $$\nDefinition 1.2: Local Linear Model The local linear model of $f$ at $\\theta$ is $$ m_{\\theta}(h):=f(\\theta)+\\nabla f(\\theta)^Th $$ The above inequality hows that on a sufficiently small neighborhood, the true objective differs from its linear model by at most $O(||h||_2)$. Thus, minimizing $m_{\\theta}(h)$ over small steps is a principled approximation to minimizing the true objective locally.\nSteepest descent as a geometric optimization problem For Frechet differentiable function, $f$, we have $$ \\min_{||u||_2=1}D_uf(\\theta)=\\min_{||u||_2=1}\\nabla f(\\theta)^Tu. $$ Theorem 1.3: Steepest descent direction If $\\nabla f(\\theta)\\neq 0$, then $$ \\min_{||u||_2=1}\\nabla f(\\theta)^Tu=-||\\nabla f(\\theta)||_2 $$ ’ Proof of the above theorem follows directly from Cauchy-Schwartz inequality.\nWhy the steepest descent direction guarantees decrease ? Directional derivatives describe infinitesimal behavior. We now show that sufficiently small steps in the steepest descent direction produce an actual decrease in the objective.\nProposition 1.1: Local Decrease along steepest descent Suppose $f$ is Frechet differentiable at $\\theta$ and $\\nabla f(\\theta)\\neq 0$. Let $$ u^{*}=-\\frac{\\nabla f(\\theta)}{||\\nabla f(\\theta)||_2} $$ Then there exists $t_0$ such that for all $t\\in (0,t_0)$, $$ f(\\theta+tu^{*})",
-  "wordCount" : "866",
-  "inLanguage": "en",
-  "datePublished": "2026-01-10T00:00:00Z",
-  "dateModified": "2026-01-10T00:00:00Z",
-  "author":[{
-    "@type": "Person",
-    "name": {"name":"Avinandan Roy"}
-  }],
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://avi48437.github.io/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-03/"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "Avi | Personal Website",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://avi48437.github.io/favicon.ico"
-    }
-  }
-}
-</script>
 </head>
 <body id="top">
     <header class="header">
     <nav class="nav">
         <div class="logo">
-            <a href="https://avi48437.github.io/" accesskey="h" title="Avinandan Roy (Alt + H)">
-                <img src="https://avi48437.github.io/images/profile.jpg" alt="" aria-label="logo"
+            <a href="http://localhost:1313/" accesskey="h" title="Avinandan Roy (Alt + H)">
+                <img src="http://localhost:1313/images/profile.jpg" alt="" aria-label="logo"
                     height="30">Avinandan Roy</a>
             <div class="logo-switches">
                 <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
@@ -277,37 +211,37 @@
         </div>
         <ul id="menu">
             <li>
-                <a href="https://avi48437.github.io/bio/" title="Bio">
+                <a href="http://localhost:1313/bio/" title="Bio">
                     <span>Bio</span>
                 </a>
             </li>
             <li>
-                <a href="https://avi48437.github.io/notes/" title="Notes">
+                <a href="http://localhost:1313/notes/" title="Notes">
                     <span>Notes</span>
                 </a>
             </li>
             <li>
-                <a href="https://avi48437.github.io/blogs/" title="Blogs">
+                <a href="http://localhost:1313/blogs/" title="Blogs">
                     <span>Blogs</span>
                 </a>
             </li>
             <li>
-                <a href="https://avi48437.github.io/links/" title="Links">
+                <a href="http://localhost:1313/links/" title="Links">
                     <span>Links</span>
                 </a>
             </li>
             <li>
-                <a href="https://avi48437.github.io/travel/" title="Travel">
+                <a href="http://localhost:1313/travel/" title="Travel">
                     <span>Travel</span>
                 </a>
             </li>
             <li>
-                <a href="https://avi48437.github.io/contact/" title="Contact">
+                <a href="http://localhost:1313/contact/" title="Contact">
                     <span>Contact</span>
                 </a>
             </li>
             <li>
-                <a href="https://avi48437.github.io/papers/" title="Paper Summary">
+                <a href="http://localhost:1313/papers/" title="Paper Summary">
                     <span>Paper Summary</span>
                 </a>
             </li>
@@ -886,7 +820,7 @@ $$ as $\frac{o(t)}{t}$ goes to $0$ as $t\rightarrow 0$, there exist $t_0$ such t
     </main>
     
 <footer class="footer">
-        <span>&copy; 2026 <a href="https://avi48437.github.io/">Avi | Personal Website</a></span> · 
+        <span>&copy; 2026 <a href="http://localhost:1313/">Avi | Personal Website</a></span> · 
 
     <span>
         Powered by
