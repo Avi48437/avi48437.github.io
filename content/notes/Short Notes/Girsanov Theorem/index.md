@@ -6,4 +6,4 @@ summary: "A full report on the Girsanov Theorem."
 weight: 1
 ---
 
-{{< pdfembed src="pdfs/Girsanov-Theorem.pdf" >}}
+{{< pdfembed src="/pdfs/Girsanov-Theorem.pdf?v=101" >}}
