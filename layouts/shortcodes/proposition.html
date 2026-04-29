@@ -1,9 +1,18 @@
-{{ $title := .Get "title" | default "Proposition" }}
-{{ $label := .Get "label" | default "" }}
+{{/* layouts/shortcodes/proposition.html */}}
+{{ $type := "Proposition" }}
+{{ $subtitle := .Get "subtitle" | default (.Get "title") | default "" }}
+{{ $sec := .Page.Scratch.Get "currentSection" | default 1 }}
 
-<div class="thm-block proposition" {{ if $label }}id="{{ $label }}"{{ end }}>
-  <div class="thm-title">{{ $title }}</div>
-  <div class="thm-body">
-    {{ .Inner | markdownify }}
+{{ $key := printf "propositionCounter-%d" $sec }}
+{{ $cur := .Page.Scratch.Get $key | default 0 }}
+{{ $n := add $cur 1 }}
+{{ .Page.Scratch.Set $key $n }}
+
+{{ $id := .Get "label" | default (printf "proposition-%d-%d" $sec $n) }}
+
+<div class="thm-block proposition" id="{{ $id }}">
+  <div class="thm-title">
+    {{ $type }} {{ $sec }}.{{ $n }}{{ if $subtitle }}: {{ $subtitle }}{{ end }}
   </div>
+  <div class="thm-body">{{ .Inner | markdownify }}</div>
 </div>

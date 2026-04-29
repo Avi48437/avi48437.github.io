@@ -1,0 +1,80 @@
+{{ define "main" }}
+{{ partial "global-filetree.html" . }}
+
+<main class="page-main-content">
+  <div class="notes-page">
+    <div class="notes-container">
+
+      <header class="notes-header">
+        <h1 class="notes-title">{{ .Title }}</h1>
+        {{ with .Content }}
+          <div class="notes-intro">
+            {{ . }}
+          </div>
+        {{ end }}
+      </header>
+
+      {{ $subsections := .Sections.ByWeight }}
+      {{ $regularPages := .RegularPages.ByWeight }}
+
+      {{ if gt (len $subsections) 0 }}
+        <div class="notes-grid">
+          {{ range $subsections }}
+            <a class="notes-card notes-card-link" href="{{ .RelPermalink }}">
+              <div class="notes-card-body">
+                <h2 class="notes-card-title">{{ .Title }}</h2>
+
+                {{ with .Params.summary }}
+                  <p class="notes-card-summary">{{ . }}</p>
+                {{ else }}
+                  {{ with .Summary }}
+                    <p class="notes-card-summary">{{ . | plainify }}</p>
+                  {{ else }}
+                    <p class="notes-card-summary">No summary available.</p>
+                  {{ end }}
+                {{ end }}
+
+                <div class="notes-card-meta">
+                  <span class="notes-card-cta">Open</span>
+                </div>
+              </div>
+            </a>
+          {{ end }}
+        </div>
+
+      {{ else if gt (len $regularPages) 0 }}
+        <div class="notes-grid">
+          {{ range $regularPages }}
+            <a class="notes-card notes-card-link lecture-card" href="{{ .RelPermalink }}">
+              <div class="notes-card-body">
+                <div class="lecture-card-top">
+                  {{ with .Params.date }}
+                    <span class="lecture-badge">{{ .Format "Jan 2, 2006" }}</span>
+                  {{ end }}
+                </div>
+
+                <h2 class="notes-card-title">{{ .Title }}</h2>
+
+                {{ with .Params.summary }}
+                  <p class="notes-card-summary">{{ . }}</p>
+                {{ else }}
+                  {{ with .Summary }}
+                    <p class="notes-card-summary">{{ . | plainify }}</p>
+                  {{ else }}
+                    <p class="notes-card-summary">No summary available.</p>
+                  {{ end }}
+                {{ end }}
+
+                <div class="notes-card-meta">
+                  <span class="notes-card-cta">Open</span>
+                </div>
+              </div>
+            </a>
+          {{ end }}
+        </div>
+      {{ end }}
+
+    </div>
+  </div>
+</main>
+{{ end }}

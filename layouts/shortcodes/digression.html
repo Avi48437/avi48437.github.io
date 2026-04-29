@@ -1,0 +1,18 @@
+{{/* layouts/shortcodes/digression.html */}}
+{{ $type := "Digression" }}
+{{ $subtitle := .Get "subtitle" | default (.Get "title") | default "" }}
+{{ $sec := .Page.Scratch.Get "currentSection" | default 1 }}
+
+{{ $key := printf "digressionCounter-%d" $sec }}
+{{ $cur := .Page.Scratch.Get $key | default 0 }}
+{{ $n := add $cur 1 }}
+{{ .Page.Scratch.Set $key $n }}
+
+{{ $id := .Get "label" | default (printf "digression-%d-%d" $sec $n) }}
+
+<details class="digression-block" id="{{ $id }}">
+  <summary class="digression-title">
+    {{ $type }} {{ $sec }}.{{ $n }}{{ if $subtitle }}: {{ $subtitle }}{{ end }}
+  </summary>
+  <div class="digression-body">{{ .Inner | markdownify }}</div>
+</details>

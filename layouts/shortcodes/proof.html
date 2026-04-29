@@ -1,7 +1,12 @@
-<div class="proof-block">
-  <div class="proof-title">Proof.</div>
+{{ $open := .Get "open" }}
+{{ $title := .Get "title" | default "Proof." }}
+
+<details class="proof-block" {{ if or (not $open) (eq $open "true") }}open{{ end }}>
+  <summary class="proof-title">{{ $title }}</summary>
+
   <div class="proof-body">
     {{ .Inner | markdownify }}
   </div>
+
   <div class="proof-end">□</div>
-</div>
+</details>

@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto" data-theme="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Lecture 1: Modes of Convergence | Avi | Personal Website</title>
+<meta name="keywords" content="">
+<meta name="description" content="Introduces almost sure convergence, convergence in probability, convergence in distribution, and the relations among them.">
+<meta name="author" content="">
+<link rel="canonical" href="https://avi48437.github.io/notes/washu-spring-semester/theory-of-statistics-ii/lecture-01/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.343cc480b9ffc8f04ccbe5e968ad674880cab773ec19905e93033065c1e7a804.css" integrity="sha256-NDzEgLn/yPBMy&#43;XpaK1nSIDKt3PsGZBekwMwZcHnqAQ=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://avi48437.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://avi48437.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://avi48437.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://avi48437.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://avi48437.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="https://avi48437.github.io/notes/washu-spring-semester/theory-of-statistics-ii/lecture-01/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+                color-scheme: dark;
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .toc {
+                background: var(--entry);
+            }
+        }
+
+        @media (prefers-color-scheme: light) {
+            .list::-webkit-scrollbar-thumb {
+                border-color: var(--code-bg);
+            }
+        }
+
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else if (localStorage.getItem("pref-theme") === "light") {
+       document.querySelector("html").dataset.theme = 'light';
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script><link rel="stylesheet" href="/css/custom.min.ff270f8df3ba879fe9ef07b3c5b55007ad732c159f9c276596d2edd63d8da1e0.css"><script defer src="/js/nav-overflow.min.86e3c6af6c08bfe941e6868d1b70b3609d659d92391e95aeec96e30a5006877d.js"></script>
+
+
+  <link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
+/>
+
+<script
+  defer
+  src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js">
+</script>
+
+<script
+  defer
+  src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js">
+</script>
+
+<script>
+(function () {
+  const KATEX_MACROS = {
+    "\\R": "\\mathbb{R}",
+    "\\Eb": "\\mathbb{E}",
+    "\\Pb": "\\mathbb{P}",
+    "\\Var": "\\operatorname{Var}",
+    "\\Cov": "\\operatorname{Cov}",
+    "\\argmin": "\\operatorname*{arg\\,min}",
+    "\\argmax": "\\operatorname*{arg\\,max}",
+    "\\SubG": "\\text{Sub-Gaussian}",
+    "\\SubE": "\\text{Sub-Exponential}",
+    "\\Perp": "\\perp\\!\\!\\!\\perp",
+    "\\ceil": "\\left\\lceil #1 \\right\\rceil",
+    "\\floor": "\\left\\lfloor #1 \\right\\rfloor"
+  };
+
+  const PAGE_MACROS = {"\\asconv":"\\xrightarrow{\\text{a.s.}}","\\dconv":"\\xrightarrow{d}","\\ind":"\\operatorname{IND}","\\lrconv":"\\xrightarrow{L_r}","\\pconv":"\\xrightarrow{P}"};
+  Object.assign(KATEX_MACROS, PAGE_MACROS);
+
+  function stripMathDelims(s) {
+    return s
+      .replace(/^\\\(/, "")
+      .replace(/\\\)$/, "")
+      .replace(/^\\\[/, "")
+      .replace(/\\\]$/, "");
+  }
+
+  function renderPandocMathSpans() {
+    const inlineSpans = document.querySelectorAll("span.math.inline");
+    inlineSpans.forEach(el => {
+      if (el.querySelector(".katex")) return; 
+      const tex = stripMathDelims(el.textContent.trim());
+      try {
+        katex.render(tex, el, {
+          displayMode: false,
+          throwOnError: false,
+          macros: KATEX_MACROS
+        });
+      } catch (_) {}
+    });
+
+    const displaySpans = document.querySelectorAll("span.math.display");
+    displaySpans.forEach(el => {
+      if (el.querySelector(".katex")) return; 
+      const tex = stripMathDelims(el.textContent.trim());
+      try {
+        katex.render(tex, el, {
+          displayMode: true,
+          throwOnError: false,
+          macros: KATEX_MACROS
+        });
+      } catch (_) {}
+    });
+  }
+
+  function renderDelimiterMath() {
+    if (typeof renderMathInElement !== "function") return;
+    renderMathInElement(document.body, {
+      delimiters: [
+        { left: "$$", right: "$$", display: true },
+        { left: "$",  right: "$",  display: false },
+        { left: "\\(", right: "\\)", display: false },
+        { left: "\\[", right: "\\]", display: true }
+      ],
+      throwOnError: false,
+      macros: KATEX_MACROS,
+      
+      ignoredTags: ["script","noscript","style","textarea","pre","code","option"],
+      ignoredClasses: ["katex", "math"]
+    });
+  }
+
+  
+  function boot() {
+    if (!window.katex || typeof window.renderMathInElement !== "function") {
+      setTimeout(boot, 30);
+      return;
+    }
+    
+    renderDelimiterMath();
+    renderPandocMathSpans();
+  }
+
+  document.addEventListener("DOMContentLoaded", boot);
+})();
+</script>
+
+
+<meta property="og:url" content="https://avi48437.github.io/notes/washu-spring-semester/theory-of-statistics-ii/lecture-01/">
+  <meta property="og:site_name" content="Avi | Personal Website">
+  <meta property="og:title" content="Lecture 1: Modes of Convergence">
+  <meta property="og:description" content="Introduces almost sure convergence, convergence in probability, convergence in distribution, and the relations among them.">
+  <meta property="og:locale" content="en-us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="notes">
+    <meta property="article:published_time" content="2026-01-10T00:00:00+00:00">
+    <meta property="article:modified_time" content="2026-01-10T00:00:00+00:00">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Lecture 1: Modes of Convergence">
+<meta name="twitter:description" content="Introduces almost sure convergence, convergence in probability, convergence in distribution, and the relations among them.">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Notes",
+      "item": "https://avi48437.github.io/notes/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  4 ,
+      "name": "Lecture 1: Modes of Convergence",
+      "item": "https://avi48437.github.io/notes/washu-spring-semester/theory-of-statistics-ii/lecture-01/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Lecture 1: Modes of Convergence",
+  "name": "Lecture 1: Modes of Convergence",
+  "description": "Introduces almost sure convergence, convergence in probability, convergence in distribution, and the relations among them.",
+  "keywords": [
+    
+  ],
+  "articleBody": "Convergence Concepts A sequence of random variables in $\\R$ $X_n \\to X$:\nIn probability if $\\forall,\\epsilon\u003e0,\\ \\mathbb{P}(|X_n - X| \u003e \\epsilon) \\to 0$, Almost surely if $\\mathbb{P}(\\lim_{n\\to\\infty} X_n = X) = 1$, In $\\mathbf{L_r,r\u003e0}$ if $\\Eb|X_n-X|^r\\rightarrow 0$, In distribution if $F_n(x)=\\Pb(X_n\\le x)\\rightarrow F(x)=\\Pb(X\\le x)\\quad \\forall x\\in C(F)$, where $C(F)=\\lbrace x|F\\text{ is continuous at }x\\rbrace$. Note that, $\\lbrace |X_n-X|\u003e\\epsilon \\rbrace$ is nothing but $\\lbrace \\omega: |X_n(\\omega)-X(\\omega)|\u003e\\epsilon \\rbrace$. Therefore $X_n,X$ when they converge in probability, almost surely or in $L_r$ need to be on the same probability space.\nBut for convergennce in distribution it is not necessary that $X_n$ and $X$ lie in the same probability space.\nTheorem 1.1: Cramer Wold Device Suppose $X_n\\in \\R^k$ and $X_n\\rightarrow X\\Leftrightarrow \\alpha^TX_n\\xrightarrow{d} \\alpha^TX\\quad \\forall \\alpha\\in \\R^k$ The next theorem gives an equivalent definition for the almost sure convergence. Theorem 1.2 $X_n\\xrightarrow{\\text{a.s.}}X$ iff for every $\u003e0 $, $\\lim\\limits_{n\\rightarrow \\infty}\\Pb(|X_k-X|\u003e\\epsilon\\quad \\forall k\\ge n)=1$ Proof. We can write $X_n\\asconv X$ as $\\Pb(\\lim_{n\\rightarrow \\infty}X_n=X)=1$. Let, $A=\\lbrace \\lim_{n\\rightarrow \\infty}X_n=X\\rbrace$. Fix $\\omega \\in A$. Fix $\\epsilon\u003e0$. Then, equivalently for $\\epsilon\u003e0, \\exists n$ such that $\\forall k\\ge n$, $|X_k-X|\u003c\\epsilon$. Therefore, we can write $$ \\begin{equation} \\Pb(A)=\\Pb\\left(\\lim_{n\\rightarrow \\infty}X_n=X\\right)=\\Pb\\left(\\bigcup_{\\epsilon \u003e0}\\bigcap_{n=1}^{\\infty}\\bigcup_{k\\ge n}\\lbrace|X_k-X|\u003c\\epsilon\\rbrace\\right)=\\Pb\\left(\\bigcup_{\\epsilon \u003e0}\\bigcap_{n=1}^{\\infty}A_n(\\epsilon)\\right),\\tag{1.1} \\end{equation} $$ where $A_n(\\epsilon)=\\bigcup_{k\\ge n}\\lbrace|X_k-X|\u003c\\epsilon\\rbrace$. Now, as real line in dense with the set of the rational numbers, which are countable, we can write $$ \\Pb\\left(\\bigcup_{\\epsilon \u003e0}\\bigcap_{n=1}^{\\infty}A_n(\\epsilon)\\right)=\\Pb\\left(\\bigcup_{q\\in \\mathbb{Q}^{+}}\\bigcap_{n=1}^{\\infty}A_n(q)\\right) $$ Let, $q_1$ and $q_2$ are two rational numbers such that $q_1\u003eq_2$. Note that if $\\omega \\in \\bigcup_nA_n(q_2)\\implies \\omega \\in \\bigcup_nA_n(q_2)$. Therefore these sets, $\\bigcup_nA_n(q)$ decreases as $q$ decreases. In other words, we have $$ \\text{as } q\\downarrow 0,\\quad \\bigcup_nA_n(q)\\downarrow \\bigcap_{q\\in \\mathbb{Q}^{+}}\\bigcup_nA_n(q) $$ Therefore, using continuity from below property of probability measures, we can say that $$ \\Pb\\left(\\bigcup_nA_n(q)\\right) \\downarrow \\Pb\\left(\\bigcap_{q\\in \\mathbb{Q}^{+}}\\bigcup_nA_n(q)\\right)=1 $$ Therefore, $$ \\Pb\\left(\\bigcup_nA_n(q)\\right) = 1 \\quad \\forall q\\in \\mathbb{Q}^{+} $$ The vice-versa is also true as the limit of $1$’s will be 1. Now note that as $\\R$ is dense, for all $\\epsilon\u003e0$, we can find a sequence of rational numbers, $q_n\\rightarrow \\epsilon$. Hence using continuity of measure we can say the following $$ \\Pb\\left(\\bigcup_nA_n(\\epsilon)\\right) = 1 \\quad \\forall \\epsilon \u003e0 $$ It is easy to see that if we fix $\\epsilon\u003e0$, $A_n(\\epsilon)\\uparrow \\bigcup_nA_n(\\epsilon)$. Therefore, it is claimed that $$\\lim_{n\\rightarrow\\infty}\\Pb(A_n(\\epsilon) )=\\Pb\\left(\\bigcup_nA_n(\\epsilon )\\right) = 1 $$ □ The next theorem is the definition only that gives an equivalent way to define the the in probability convergence. Theorem 1.3 $X_n\\pconv X$ iff $\\Pb(|X_n-X|\u003e\\epsilon)\\rightarrow 0$ iff $\\Pb(|X_n-X|\\le \\epsilon)\\rightarrow 1$ The next theorem shows the relationships between different mode of convergence. Theorem 1.4 Suppose $\\lbrace X_n\\rbrace$ and $X$ are random variables defined on same probability space. Then the following are true\n$X_n\\asconv X \\implies X_n\\pconv X$ $X_n\\pconv X\\implies X_n\\dconv X$ $X_n\\lrconv X\\implies X_n\\pconv X$ Proof. Proof of (iii) follows from Markov’s inequality, and the proof of (i) is a consequence of Theorem 1.1 and Theorem 1.2. We will prove the second part now.\nTake $x\\in C(F_X)$. Take $A=\\lbrace X_n\\le x\\rbrace$. Fix $\\omega \\in A$. Fix any $\\epsilon\u003e0$. Then there will exist $N$, such that for all $n\\ge N$, we shall have $|X_n-X|\u003c\\epsilon$. Hence we have $X\u003c= x+\\epsilon \\mathbf{1}$ (where $\\mathbf{1}=(1,1,\\dots,1)\\in \\R^d$) for $n\\ge N$ and we may have $|X_n-X|\u003e\\epsilon$ for some $k\\epsilon \\rbrace \\\\ \\therefore \\quad \u0026 \\Pb(X_n\\le x)\\le \\Pb(X\\le x+\\epsilon \\mathbf{1})+\\Pb(|X_n-X|\u003e\\epsilon) \\\\ \\implies\u0026 F_{X_n}(x)\\le F_X(x+\\epsilon \\mathbf{1})+\\Pb(|X-X_n|\u003e\\epsilon) \\\\ \\implies\u0026 \\limsup_{n\\rightarrow \\infty}F_{X_n}(x)\\le F_X(x+\\epsilon \\mathbf{1}) \\tag{$\\star$} \\end{align*} $$\nSimilarly, we can say that $\\lbrace X \\le x - \\epsilon \\mathbf{1} \\rbrace \\subset \\lbrace X_n\\le x\\rbrace \\cup \\lbrace |X_n-X|\u003e\\epsilon \\rbrace$. Hence, we shall have the following $$ \\begin{align*} \u0026F_X(x-\\epsilon \\mathbf{1})\\le F_{X_n}(x)+\\Pb(|X_n-X|\u003e\\epsilon)\\\\ \\implies \u0026 F_X(x-\\epsilon \\mathbf{1})\\le \\liminf_{n\\rightarrow \\infty}F_{X_n}(x)\\tag{$\\star\\star$} \\end{align*} $$ Combining $\\star$ and $\\star\\star$ and using the continuity of $F_X$ at $x$, we get that $\\lim\\limits_{n\\rightarrow \\infty}F_{X_n}(x)=F_X(x)$.\n□ The next theorem is an important theorem, which will be used time and again in many contexts. Theorem 1.5: Portmanteau Theorem Suppose a sequence of random variables $\\lbrace X_n\\rbrace$ is such that $X_n\\rightarrow X$ in $\\R^d$. Then the following are equivalent\n$\\Pb(X_n\\le x)\\rightarrow \\Pb(X\\le x)\\quad \\forall x\\in C(F_X)$; $\\Eb[f(X_n)]\\rightarrow \\Eb[f(X)]\\quad \\forall$ bounded continuous function $f$; $\\Eb[f(X_n)]\\rightarrow \\Eb[f(X)]\\quad \\forall$ bounded Lipchitz function $f$; $\\liminf\\limits_{n\\rightarrow \\infty}\\Eb[f(X_n)]\\ge \\Eb[f(X)]\\quad \\forall$ nonnegative, continuous function $f$; $\\liminf\\limits_{n\\rightarrow \\infty}\\Pb(X_n\\in G)\\ge \\Pb(X\\in G)\\quad \\forall$ open set $G$; $\\limsup\\limits_{n\\rightarrow \\infty}\\Pb(X_n\\in F)\\le \\Pb(X\\in F)\\quad \\forall$ closed set $F$; $\\lim\\limits_{n\\rightarrow \\infty}\\Pb(X_n\\in B)=\\Pb(X\\in B)\\quad \\forall$ Borel set $B$ with $\\Pb(X\\in \\delta B)=0$, where $\\delta B$ denotes the boundary set of B. Proof. i. $\\implies$ ii.\nNote that from the first condition it is clear that for all rectangles, $I\\in \\R^d$, we will have $\\Pb(X_n\\in I)\\rightarrow \\Pb(X\\in I)$. Fix $\\epsilon \u003e0$. Choose sufficiently large compact rectangle $I$ such that $\\Pb(X\\notin I)\u003c \\epsilon$. As $f$ is a continuous function, inside the rectangle $f$ is a uniformly continuous function. Let, $I=[a_1,b_1]\\times \\dots \\times [a_d,b_d]$. Then there exists $\\delta\u003e0$ such that whenever $||x-y||\u003c\\delta ,x,y\\in I$, $|f(x)-f(y)|\u003c \\epsilon$. Now, let $|a_{ij}-b_{ij}|\u003c\\frac{\\delta}{\\sqrt{d}}$ for $i=1,\\dots ,d$. Then there will be finitely many one dimensional rectangles in each co-ordinate which will satisfy this. Hence, we will find finitely many $I_j’s$ such that if $x,y\\in I_j$, $|f(x)-f(y)|\\epsilon$ and $I=\\bigcup_j I_j$. Take $x_j\\in I_j$ and define $f_{\\epsilon}(x)=\\sum_jf(x_j)I_j(x)$. Hence, on $I$, we have $|f-f_{\\epsilon}|\u003c\\epsilon$. Now, $$ \\begin{align*} \u0026 \\left|\\Eb[f(X_n)]-\\Eb[f_{\\epsilon}(X_n)]\\right| \\le \\left|\\int_{X_n\\in I}(f-f_{\\epsilon})\\right|+\\left|\\int_{X_n\\notin I}f(X_n)\\right| \\le \u0026 \\epsilon+ M\\Pb(X_n\\notin I) \\\\ \u0026 \\left|\\Eb[f(X)]-\\Eb[f_{\\epsilon}(X)]\\right|\\le \\epsilon+ \\Pb(X\\notin I)\\le 2\\epsilon \\\\ \u0026 \\left|\\Eb[f_{\\epsilon}(X_n)]-\\Eb[f_{\\epsilon}(X)]\\right|\\le \\sum_{j}\\left|\\Pb(X_n\\in I)-\\Pb(X\\in I)\\right||f(x_j)| \\end{align*} $$ Combining the above three inequalities, if we take $n\\rightarrow \\infty$, we shall have $$ \\left|\\Eb[f(X_n)]-\\Eb[f(X)]\\right|\u003c 5\\epsilon $$ As, $\\epsilon$ was arbitrary, we will have our desired result.\nii. $\\implies$ iii.\nAll Lipchitz functions are continuous\nii. $\\Longleftrightarrow$ iv.\nTo prove that the former one implies the later one, we need to approximate the non-negative continuous functions using bounded continuous functions and then we can use the part ii . Note that $f_m(x)=f(x)\\wedge m$ is a bounded continuous function for any continuous function $f$. Therefore, we have $$ \\Eb[f(X_n)\\wedge m]\\rightarrow \\Eb[f(X)\\wedge m] $$ As, $0\\le f_m\\le f$, we also have, $\\Eb[f(X_n)\\wedge]\u003c \\Eb[f(X_n)]\\quad \\forall m,n$ and from the monotone convergence theorem, we can say that $\\Eb[f(X)\\wedge m]\\uparrow \\Eb[f(X)]$. Hence, we have the following result that $\\liminf\\limits_{n\\rightarrow \\infty}\\Eb[f(X_n)]\\ge \\Eb[f(X)]$. For the converse, part it is sufficient to show that for any bounded continuous function, $g$, $\\limsup\\limits_{n\\rightarrow \\infty} \\Eb[g(X_n)]\\le \\Eb[g(X)]$. Let, $g\\le M_g$. As $M_g-g$ is a nonnegative continuous function, following iv. we shall have $$ \\liminf_{n\\rightarrow \\infty}\\Eb[M_g-g(X_n)]\\le \\Eb[M_g-g(X)]\\implies \\limsup_{n\\rightarrow \\infty} \\Eb[g(X_n)]\\le \\Eb[g(X)] $$\nii. $\\implies$ vi.\nLet, $F$ be a closed set. $F^{\\delta}=\\lbrace x| d(x,F)\u003c\\delta \\rbrace$ (This is called the $\\delta$ fattening of the set F). Consider the function $f_{\\epsilon}(x)=\\left(1-\\frac{d(x,F)}{\\epsilon}\\right)_{+}$. This function is uniformly continuous function and $F^{\\delta}\\downarrow F$ as $\\delta\\downarrow 0$. Now, we can show easily that $$ \\mathbf{1}_F\\le f_{\\epsilon} \\le \\mathbf{1}_{F^{\\epsilon}} $$ Using this we can say that $$ \\limsup_{n\\rightarrow \\infty} \\Pb(X_n \\in F)\\le \\limsup_{n\\rightarrow \\infty} \\Eb[f(X_n)]\\rightarrow \\Eb f[X]\\le \\Pb(X \\in F^{\\epsilon}) \\downarrow \\Pb(X\\in F) $$\nv $\\Longleftrightarrow$ vi\nUsing the fact that if $F$ is closed $F^c$ is open and vice versa.\nv.+vi. $\\implies$ vii.\nWe know that $\\bar{B}=B^{\\circ}\\bigcup \\delta B$. $B^{\\circ}$ is an open set. Then we shall have $$ \\begin{align*} \u0026 \\Pb(X\\in B^{\\circ})\\le \\liminf_{n\\rightarrow \\infty} \\Pb(X_n \\in B^{\\circ})\\le \\limsup_{n\\rightarrow \\infty} \\Pb(X_n \\in \\bar{B}) \\le \\Pb(X\\in \\bar{B})\\tag{$\\star$} \\\\ \u0026 \\Pb(X\\in B^{\\circ})\\le \\Pb(X\\in B)\\le \\Pb(X\\in \\bar{B})\\tag{$\\star\\star$} \\end{align*} $$ As, $\\Pb(X\\in \\delta B)=0$, $\\Pb(X\\in B^{\\circ})=\\Pb(X\\in \\bar{B})$, the equality follows in $\\star$ amd $\\star\\star$. Hence the result follows.\nvii. $\\implies$ i.\nThis follows trivially as we apply vii. with $B=(-\\infty,x]$, where $\\delta B=\\lbrace x\\rbrace$ and $x$ is a continuity point of $F_X$.\n□ Portmanteau theorem is a useful theorem as we shall see and we shall be using the equivalent conditions of the week convergence now and then. The next theorem is continuous mapping theorem Theorem 1.6: Continuous Mapping Theorem Let, $X_n\\in \\R^k$ and $g$ be function from $\\R^k$ to $\\R^m$. Let, $D_g=\\lbrace x\\in \\R^k: \\text{ $g$ is discontinuous at $x$}\\rbrace$. Let, $\\Pb(X\\in D_g)=0$. Then,\n$X_n\\xrightarrow{d}X \\implies g(X_n)\\xrightarrow{d}g(X)$; $X_n\\xrightarrow{P}X \\implies g(X_n)\\xrightarrow{P}g(X)$; $X_n\\xrightarrow{\\text{a.s.}}X \\implies g(X_n)\\xrightarrow{\\text{a.s.}}g(X)$; Proof. iii. Note, that $\\{X_n \\rightarrow g(X)\\}\\subset \\{g(X_n) \\rightarrow g(X)\\}\\cup \\{X \\in D_g\\}$. Hence, $ \\Pb(g(X_n) \\rightarrow g(X))+\\Pb(X \\in D_g) \\ge (X_n \\rightarrow X)=1 $. Hence, we have $\\Pb(g(X_n)\\rightarrow g(X))=1$. Thus $g(X_n)\\asconv g(X)$.\nii. We know that $X_n\\pconv X$ iff for every subsequence there exists a further subsequence with converges to the limiting distribution almost surely. Therefore, $$ \\begin{align*} \u0026 \\exists \\lbrace n_{k_i}\\rbrace:\\quad X_{n_{k_i}}\\asconv X, \\\\ \\therefore\\quad \u0026 \\exists \\lbrace n_{k_i}\\rbrace:\\quad g(X_{n_{k_i}})\\asconv g(X)\\\\ \\therefore\\quad \u0026 g(X_n)\\pconv g(X) \\end{align*} $$\ni. Let $F$ be a closed set. As $X_n\\dconv X$, by Portmanteau theorem we know that $\\limsup\\limits_{n\\rightarrow \\infty}\\Pb(X_n\\in F)\\le \\Pb(X\\in F)$.\nNow, $g^{-1}(F)$ may not be a closed set as we are not given the continuity of $g$. But $\\overline{g^{-1}(F)}$\n□ ",
+  "wordCount" : "1420",
+  "inLanguage": "en",
+  "datePublished": "2026-01-10T00:00:00Z",
+  "dateModified": "2026-01-10T00:00:00Z",
+  "author":[{
+    "@type": "Person",
+    "name": {"name":"Avinandan Roy"}
+  }],
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://avi48437.github.io/notes/washu-spring-semester/theory-of-statistics-ii/lecture-01/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Avi | Personal Website",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://avi48437.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+<body id="top">
+    <header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://avi48437.github.io/" accesskey="h" title="Avinandan Roy (Alt + H)">
+                <img src="https://avi48437.github.io/images/profile.jpg" alt="" aria-label="logo"
+                    height="30">Avinandan Roy</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://avi48437.github.io/bio/" title="Bio">
+                    <span>Bio</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://avi48437.github.io/notes/" title="Notes">
+                    <span>Notes</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://avi48437.github.io/blogs/" title="Blogs">
+                    <span>Blogs</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://avi48437.github.io/links/" title="Links">
+                    <span>Links</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://avi48437.github.io/travel/" title="Travel">
+                    <span>Travel</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://avi48437.github.io/contact/" title="Contact">
+                    <span>Contact</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://avi48437.github.io/papers/" title="Paper Summary">
+                    <span>Paper Summary</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+<div id="site-sidebar-overlay" class="site-sidebar-overlay"></div>
+
+<aside id="site-sidebar" class="site-sidebar">
+  <div class="site-sidebar-inner">
+    <div class="site-sidebar-header">
+      <span class="site-sidebar-title">Contents</span>
+      <button
+        id="sidebar-close"
+        class="site-sidebar-toggle"
+        type="button"
+        aria-label="Collapse sidebar"
+      >
+        ✕
+      </button>
+    </div>
+
+    <nav class="site-sidebar-nav">
+      <ul class="filetree-list">
+  
+  
+    
+    
+    
+
+    <li class="filetree-item">
+      
+        <details class="filetree-folder" open>
+          <summary class="filetree-summary">
+            <a href="/notes/" class="filetree-link " onclick="event.stopPropagation();">
+              Notes
+            </a>
+          </summary>
+
+          <div class="filetree-children">
+            
+              <ul class="filetree-list">
+  
+  
+    
+    
+    
+
+    <li class="filetree-item">
+      
+        <details class="filetree-folder" >
+          <summary class="filetree-summary">
+            <a href="/notes/short-notes/" class="filetree-link " onclick="event.stopPropagation();">
+              Short Notes
+            </a>
+          </summary>
+
+          <div class="filetree-children">
+            
+
+            
+              <ul class="filetree-list">
+                
+                  <li class="filetree-item">
+                    <a href="/notes/short-notes/girsanov-theorem/" class="filetree-link ">
+                      Girsanov Theorem
+                    </a>
+                  </li>
+                
+              </ul>
+            
+          </div>
+        </details>
+      
+    </li>
+  
+    
+    
+    
+
+    <li class="filetree-item">
+      
+        <details class="filetree-folder" open>
+          <summary class="filetree-summary">
+            <a href="/notes/washu-spring-semester/" class="filetree-link " onclick="event.stopPropagation();">
+              WASHU: Spring Semester
+            </a>
+          </summary>
+
+          <div class="filetree-children">
+            
+              <ul class="filetree-list">
+  
+  
+    
+    
+    
+
+    <li class="filetree-item">
+      
+        <details class="filetree-folder" >
+          <summary class="filetree-summary">
+            <a href="/notes/washu-spring-semester/advanced-statistical-computing-ii/" class="filetree-link " onclick="event.stopPropagation();">
+              Advanced Statistical Computing II
+            </a>
+          </summary>
+
+          <div class="filetree-children">
+            
+
+            
+              <ul class="filetree-list">
+                
+                  <li class="filetree-item">
+                    <a href="/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-01/" class="filetree-link ">
+                      Lecture 1: Optimization Basics and Existence of Solutions
+                    </a>
+                  </li>
+                
+                  <li class="filetree-item">
+                    <a href="/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-02/" class="filetree-link ">
+                      Lecture 2: Convexity, Geometry, and Differentiability in Optimization
+                    </a>
+                  </li>
+                
+                  <li class="filetree-item">
+                    <a href="/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-03/" class="filetree-link ">
+                      Lecture 3: Gradient Geometry and Iterative Optimization
+                    </a>
+                  </li>
+                
+              </ul>
+            
+          </div>
+        </details>
+      
+    </li>
+  
+    
+    
+    
+
+    <li class="filetree-item">
+      
+        <details class="filetree-folder" open>
+          <summary class="filetree-summary">
+            <a href="/notes/washu-spring-semester/theory-of-statistics-ii/" class="filetree-link " onclick="event.stopPropagation();">
+              Theory of Statistics II
+            </a>
+          </summary>
+
+          <div class="filetree-children">
+            
+
+            
+              <ul class="filetree-list">
+                
+                  <li class="filetree-item">
+                    <a href="/notes/washu-spring-semester/theory-of-statistics-ii/lecture-01/" class="filetree-link active">
+                      Lecture 1: Modes of Convergence
+                    </a>
+                  </li>
+                
+              </ul>
+            
+          </div>
+        </details>
+      
+    </li>
+  
+</ul>
+            
+
+            
+          </div>
+        </details>
+      
+    </li>
+  
+</ul>
+            
+
+            
+          </div>
+        </details>
+      
+    </li>
+  
+    
+    
+    
+
+    <li class="filetree-item">
+      
+        <details class="filetree-folder" >
+          <summary class="filetree-summary">
+            <a href="/papers/" class="filetree-link " onclick="event.stopPropagation();">
+              Paper Summaries
+            </a>
+          </summary>
+
+          <div class="filetree-children">
+            
+
+            
+              <ul class="filetree-list">
+                
+                  <li class="filetree-item">
+                    <a href="/papers/nonparametric-regression-model-with-tree-structured-response/" class="filetree-link ">
+                      Nonparametric Regression Model with Tree-structured Response
+                    </a>
+                  </li>
+                
+              </ul>
+            
+          </div>
+        </details>
+      
+    </li>
+  
+    
+    
+    
+
+    <li class="filetree-item">
+      
+        <a href="/contact/" class="filetree-link ">
+          Contact
+        </a>
+      
+    </li>
+  
+    
+    
+    
+
+    <li class="filetree-item">
+      
+        <a href="/blogs/" class="filetree-link ">
+          
+        </a>
+      
+    </li>
+  
+    
+    
+    
+
+    <li class="filetree-item">
+      
+        <a href="/links/" class="filetree-link ">
+          
+        </a>
+      
+    </li>
+  
+    
+    
+    
+
+    <li class="filetree-item">
+      
+        <a href="/travel/" class="filetree-link ">
+          
+        </a>
+      
+    </li>
+  
+    
+    
+    
+
+    <li class="filetree-item">
+      
+        <a href="/bio/" class="filetree-link ">
+          Bio
+        </a>
+      
+    </li>
+  
+</ul>
+    </nav>
+  </div>
+</aside>
+
+<button
+  id="sidebar-open"
+  class="site-sidebar-open"
+  type="button"
+  aria-label="Open sidebar"
+>
+  ☰
+</button>
+
+<script>
+(function () {
+  function initSidebar() {
+    const body = document.body;
+    const openBtn = document.getElementById("sidebar-open");
+    const closeBtn = document.getElementById("sidebar-close");
+    const overlay = document.getElementById("site-sidebar-overlay");
+
+    if (!body || !openBtn || !closeBtn || !overlay) return;
+
+    const STORAGE_KEY = "site-sidebar-open";
+
+    function openSidebar() {
+      body.classList.add("sidebar-open");
+      localStorage.setItem(STORAGE_KEY, "true");
+    }
+
+    function closeSidebar() {
+      body.classList.remove("sidebar-open");
+      localStorage.setItem(STORAGE_KEY, "false");
+    }
+
+    function toggleSidebar() {
+      if (body.classList.contains("sidebar-open")) {
+        closeSidebar();
+      } else {
+        openSidebar();
+      }
+    }
+
+    const saved = localStorage.getItem(STORAGE_KEY);
+
+    if (saved === "true") {
+      body.classList.add("sidebar-open");
+    } else {
+      body.classList.remove("sidebar-open");
+    }
+
+    openBtn.addEventListener("click", openSidebar);
+    closeBtn.addEventListener("click", closeSidebar);
+    overlay.addEventListener("click", closeSidebar);
+
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") {
+        closeSidebar();
+      }
+    });
+
+    window.toggleSiteSidebar = toggleSidebar;
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initSidebar);
+  } else {
+    initSidebar();
+  }
+})();
+</script>
+
+<main class="page-main-content">
+  <article class="post-single">
+    <header class="post-header">
+      <h1 class="post-title">Lecture 1: Modes of Convergence</h1>
+      
+        <div class="post-description">Introduces almost sure convergence, convergence in probability, convergence in distribution, and the relations among them.</div>
+      
+    </header>
+
+    <div class="post-content">
+      <h2 id="convergence-concepts">Convergence Concepts</h2>
+<p>A sequence of random variables in $\R$ $X_n \to X$:</p>
+<ul>
+<li><strong>In probability</strong> if $\forall,\epsilon&gt;0,\ \mathbb{P}(|X_n - X| &gt; \epsilon) \to 0$,</li>
+<li><strong>Almost surely</strong> if $\mathbb{P}(\lim_{n\to\infty} X_n = X) = 1$,</li>
+<li><strong>In $\mathbf{L_r,r&gt;0}$</strong> if $\Eb|X_n-X|^r\rightarrow 0$,</li>
+<li><strong>In distribution</strong> if $F_n(x)=\Pb(X_n\le x)\rightarrow F(x)=\Pb(X\le x)\quad \forall x\in C(F)$, where $C(F)=\lbrace x|F\text{ is continuous at }x\rbrace$.</li>
+</ul>
+<p>Note that, $\lbrace |X_n-X|&gt;\epsilon \rbrace$ is nothing but $\lbrace \omega: |X_n(\omega)-X(\omega)|&gt;\epsilon \rbrace$. Therefore $X_n,X$ when they converge in probability, almost surely or in $L_r$ need to be on the same probability space.</p>
+<p>But for convergennce in distribution it is not necessary that $X_n$ and $X$ lie in the same probability space.</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<div class="thm-block theorem" id="th-cramer-wold">
+  <div class="thm-title">
+    Theorem 1.1: Cramer Wold Device
+  </div>
+  <div class="thm-body">Suppose $X_n\in \R^k$ and $X_n\rightarrow X\Leftrightarrow \alpha^TX_n\xrightarrow{d} \alpha^TX\quad \forall \alpha\in \R^k$</div>
+</div>
+ The next theorem gives an equivalent definition for the almost sure convergence. 
+
+
+
+
+
+
+
+
+
+
+
+<div class="thm-block theorem" id="theorem-1-2">
+  <div class="thm-title">
+    Theorem 1.2
+  </div>
+  <div class="thm-body">$X_n\xrightarrow{\text{a.s.}}X$ iff for every $&gt;0 $, $\lim\limits_{n\rightarrow \infty}\Pb(|X_k-X|&gt;\epsilon\quad  \forall k\ge n)=1$</div>
+</div>
+ 
+
+
+<details class="proof-block" open>
+  <summary class="proof-title">Proof.</summary>
+
+  <div class="proof-body">
+    We can write $X_n\asconv X$ as $\Pb(\lim_{n\rightarrow \infty}X_n=X)=1$. Let, $A=\lbrace \lim_{n\rightarrow \infty}X_n=X\rbrace$. Fix $\omega \in A$. Fix $\epsilon&gt;0$. Then, equivalently for $\epsilon&gt;0, \exists  n$ such that $\forall k\ge n$, $|X_k-X|&lt;\epsilon$. Therefore, we can write <span id="eq-1.1"></span> $$
+\begin{equation}
+\Pb(A)=\Pb\left(\lim_{n\rightarrow \infty}X_n=X\right)=\Pb\left(\bigcup_{\epsilon &gt;0}\bigcap_{n=1}^{\infty}\bigcup_{k\ge n}\lbrace|X_k-X|&lt;\epsilon\rbrace\right)=\Pb\left(\bigcup_{\epsilon &gt;0}\bigcap_{n=1}^{\infty}A_n(\epsilon)\right),\tag{1.1}
+\end{equation}
+$$ where $A_n(\epsilon)=\bigcup_{k\ge n}\lbrace|X_k-X|&lt;\epsilon\rbrace$. Now, as real line in dense with the set of the rational numbers, which are countable, we can write $$
+\Pb\left(\bigcup_{\epsilon &gt;0}\bigcap_{n=1}^{\infty}A_n(\epsilon)\right)=\Pb\left(\bigcup_{q\in \mathbb{Q}^{+}}\bigcap_{n=1}^{\infty}A_n(q)\right)
+$$ Let, $q_1$ and $q_2$ are two rational numbers such that $q_1&gt;q_2$. Note that if $\omega \in \bigcup_nA_n(q_2)\implies \omega \in \bigcup_nA_n(q_2)$. Therefore these sets, $\bigcup_nA_n(q)$ decreases as $q$ decreases. In other words, we have $$
+\text{as } q\downarrow 0,\quad \bigcup_nA_n(q)\downarrow \bigcap_{q\in \mathbb{Q}^{+}}\bigcup_nA_n(q)
+$$ Therefore, using continuity from below property of probability measures, we can say that $$
+\Pb\left(\bigcup_nA_n(q)\right) \downarrow \Pb\left(\bigcap_{q\in \mathbb{Q}^{+}}\bigcup_nA_n(q)\right)=1
+$$ Therefore, $$
+\Pb\left(\bigcup_nA_n(q)\right) = 1 \quad \forall q\in \mathbb{Q}^{+}
+$$ The vice-versa is also true as the limit of $1$&rsquo;s will be 1. Now note that as $\R$ is dense, for all $\epsilon&gt;0$, we can find a sequence of rational numbers, $q_n\rightarrow \epsilon$. Hence using continuity of measure we can say the following $$
+\Pb\left(\bigcup_nA_n(\epsilon)\right) = 1 \quad \forall \epsilon &gt;0
+$$ It is easy to see that if we fix $\epsilon&gt;0$, $A_n(\epsilon)\uparrow \bigcup_nA_n(\epsilon)$. Therefore, it is claimed that $$\lim_{n\rightarrow\infty}\Pb(A_n(\epsilon) )=\Pb\left(\bigcup_nA_n(\epsilon )\right) = 1
+$$
+  </div>
+
+  <div class="proof-end">□</div>
+</details>
+ The next theorem is the definition only that gives an equivalent way to define the the <strong>in probability</strong> convergence. 
+
+
+
+
+
+
+
+
+
+
+
+<div class="thm-block theorem" id="theorem-1-3">
+  <div class="thm-title">
+    Theorem 1.3
+  </div>
+  <div class="thm-body">$X_n\pconv X$ iff $\Pb(|X_n-X|&gt;\epsilon)\rightarrow 0$ iff $\Pb(|X_n-X|\le \epsilon)\rightarrow 1$</div>
+</div>
+ The next theorem shows the relationships between different mode of convergence. 
+
+
+
+
+
+
+
+
+
+
+
+<div class="thm-block theorem" id="theorem-1-4">
+  <div class="thm-title">
+    Theorem 1.4
+  </div>
+  <div class="thm-body"><p>Suppose $\lbrace X_n\rbrace$ and $X$ are random variables defined on same probability space. Then the following are true</p>
+<ol type="i">
+<li>
+$X_n\asconv X \implies X_n\pconv X$
+</li>
+<li>
+$X_n\pconv X\implies X_n\dconv X$
+</li>
+<li>
+$X_n\lrconv X\implies X_n\pconv X$
+</li>
+</ol></div>
+</div>
+</p>
+
+
+
+<details class="proof-block" open>
+  <summary class="proof-title">Proof.</summary>
+
+  <div class="proof-body">
+    <p>Proof of (iii) follows from Markov&rsquo;s inequality, and the proof of (i) is a consequence of <a href="#theorem-1-1">Theorem 1.1</a> and <a href="#theorem-1-2">Theorem 1.2</a>. We will prove the second part now.</p>
+<p>Take $x\in C(F_X)$. Take $A=\lbrace X_n\le x\rbrace$. Fix $\omega \in A$. Fix any $\epsilon&gt;0$. Then there will exist $N$, such that for all $n\ge N$, we shall have $|X_n-X|&lt;\epsilon$. Hence we have $X&lt;= x+\epsilon \mathbf{1}$ (where $\mathbf{1}=(1,1,\dots,1)\in \R^d$) for $n\ge N$ and we may have $|X_n-X|&gt;\epsilon$ for some $k&lt;N$. Therefore we have the following $$
+\begin{align*}
+&amp; \lbrace X_n\le x\rbrace \subset \lbrace X\le x+\epsilon \mathbf{1} \rbrace \cup \lbrace |X_n-X|&gt;\epsilon \rbrace \\
+\therefore \quad &amp; \Pb(X_n\le x)\le \Pb(X\le x+\epsilon \mathbf{1})+\Pb(|X_n-X|&gt;\epsilon) \\
+\implies&amp; F_{X_n}(x)\le F_X(x+\epsilon \mathbf{1})+\Pb(|X-X_n|&gt;\epsilon) \\
+\implies&amp; \limsup_{n\rightarrow \infty}F_{X_n}(x)\le F_X(x+\epsilon \mathbf{1}) \tag{$\star$}
+\end{align*}
+$$</p>
+<p>Similarly, we can say that $\lbrace X \le x - \epsilon \mathbf{1} \rbrace \subset \lbrace X_n\le x\rbrace \cup \lbrace |X_n-X|&gt;\epsilon \rbrace$. Hence, we shall have the following $$
+\begin{align*}
+&amp;F_X(x-\epsilon \mathbf{1})\le F_{X_n}(x)+\Pb(|X_n-X|&gt;\epsilon)\\
+\implies &amp; F_X(x-\epsilon \mathbf{1})\le \liminf_{n\rightarrow \infty}F_{X_n}(x)\tag{$\star\star$}
+\end{align*}
+$$ Combining $\star$ and $\star\star$ and using the continuity of $F_X$ at $x$, we get that $\lim\limits_{n\rightarrow \infty}F_{X_n}(x)=F_X(x)$.</p>
+
+  </div>
+
+  <div class="proof-end">□</div>
+</details>
+
+<p>The next theorem is an important theorem, which will be used time and again in many contexts. 
+
+
+
+
+
+
+
+
+
+
+
+<div class="thm-block theorem" id="thm-Portmanteau">
+  <div class="thm-title">
+    Theorem 1.5: Portmanteau Theorem
+  </div>
+  <div class="thm-body"><p>Suppose a sequence of random variables $\lbrace X_n\rbrace$ is such that $X_n\rightarrow X$ in $\R^d$. Then the following are equivalent</p>
+<ol type="i">
+<li>
+$\Pb(X_n\le x)\rightarrow \Pb(X\le x)\quad \forall x\in C(F_X)$;
+<li>
+$\Eb[f(X_n)]\rightarrow \Eb[f(X)]\quad \forall$ bounded continuous function $f$;
+<li>
+$\Eb[f(X_n)]\rightarrow \Eb[f(X)]\quad \forall$ bounded Lipchitz function $f$;
+<li>
+$\liminf\limits_{n\rightarrow \infty}\Eb[f(X_n)]\ge \Eb[f(X)]\quad \forall$ nonnegative, continuous function $f$;
+<li>
+$\liminf\limits_{n\rightarrow \infty}\Pb(X_n\in G)\ge \Pb(X\in G)\quad \forall$ open set $G$;
+<li>
+$\limsup\limits_{n\rightarrow \infty}\Pb(X_n\in F)\le \Pb(X\in F)\quad \forall$ closed set $F$;
+<li>
+$\lim\limits_{n\rightarrow \infty}\Pb(X_n\in B)=\Pb(X\in B)\quad \forall$ Borel set $B$ with $\Pb(X\in \delta B)=0$, where $\delta B$ denotes the boundary set of B.
+</ol></div>
+</div>
+ 
+
+
+<details class="proof-block" >
+  <summary class="proof-title">Proof.</summary>
+
+  <div class="proof-body">
+    <p><strong>i. $\implies$ ii.</strong></p>
+<p>Note that from the first condition it is clear that for all rectangles, $I\in \R^d$, we will have $\Pb(X_n\in I)\rightarrow \Pb(X\in I)$. Fix $\epsilon &gt;0$. Choose sufficiently large compact rectangle $I$ such that $\Pb(X\notin I)&lt; \epsilon$. As $f$ is a continuous function, inside the rectangle $f$ is a uniformly continuous function. Let, $I=[a_1,b_1]\times \dots \times [a_d,b_d]$. Then there exists $\delta&gt;0$ such that whenever $||x-y||&lt;\delta ,x,y\in I$, $|f(x)-f(y)|&lt; \epsilon$. Now, let $|a_{ij}-b_{ij}|&lt;\frac{\delta}{\sqrt{d}}$ for $i=1,\dots ,d$. Then there will be finitely many one dimensional rectangles in each co-ordinate which will satisfy this. Hence, we will find finitely many $I_j&rsquo;s$ such that if $x,y\in I_j$, $|f(x)-f(y)|\epsilon$ and $I=\bigcup_j I_j$. Take $x_j\in I_j$ and define $f_{\epsilon}(x)=\sum_jf(x_j)I_j(x)$. Hence, on $I$, we have $|f-f_{\epsilon}|&lt;\epsilon$. Now, $$
+\begin{align*}
+&amp; \left|\Eb[f(X_n)]-\Eb[f_{\epsilon}(X_n)]\right| \le  \left|\int_{X_n\in I}(f-f_{\epsilon})\right|+\left|\int_{X_n\notin I}f(X_n)\right|  \le &amp; \epsilon+ M\Pb(X_n\notin I) \\
+&amp; \left|\Eb[f(X)]-\Eb[f_{\epsilon}(X)]\right|\le \epsilon+ \Pb(X\notin I)\le 2\epsilon \\
+&amp; \left|\Eb[f_{\epsilon}(X_n)]-\Eb[f_{\epsilon}(X)]\right|\le \sum_{j}\left|\Pb(X_n\in I)-\Pb(X\in I)\right||f(x_j)|
+\end{align*}
+$$ Combining the above three inequalities, if we take $n\rightarrow \infty$, we shall have $$
+\left|\Eb[f(X_n)]-\Eb[f(X)]\right|&lt; 5\epsilon
+$$ As, $\epsilon$ was arbitrary, we will have our desired result.</p>
+<p><strong>ii. $\implies$ iii.</strong></p>
+<p>All Lipchitz functions are continuous</p>
+<p><strong>ii. $\Longleftrightarrow$ iv.</strong></p>
+<p>To prove that the former one implies the later one, we need to approximate the non-negative continuous functions using bounded continuous functions and then we can use the part ii . Note that $f_m(x)=f(x)\wedge m$ is a bounded continuous function for any continuous function $f$. Therefore, we have $$
+\Eb[f(X_n)\wedge m]\rightarrow \Eb[f(X)\wedge m]
+$$ As, $0\le f_m\le f$, we also have, $\Eb[f(X_n)\wedge]&lt; \Eb[f(X_n)]\quad \forall m,n$ and from the monotone convergence theorem, we can say that $\Eb[f(X)\wedge m]\uparrow \Eb[f(X)]$. Hence, we have the following result that $\liminf\limits_{n\rightarrow \infty}\Eb[f(X_n)]\ge \Eb[f(X)]$. For the converse, part it is sufficient to show that for any bounded continuous function, $g$, $\limsup\limits_{n\rightarrow \infty} \Eb[g(X_n)]\le \Eb[g(X)]$. Let, $g\le M_g$. As $M_g-g$ is a nonnegative continuous function, following iv. we shall have $$
+\liminf_{n\rightarrow \infty}\Eb[M_g-g(X_n)]\le \Eb[M_g-g(X)]\implies \limsup_{n\rightarrow \infty} \Eb[g(X_n)]\le \Eb[g(X)]
+$$</p>
+<p><strong>ii. $\implies$ vi.</strong></p>
+<p>Let, $F$ be a closed set. $F^{\delta}=\lbrace x| d(x,F)&lt;\delta \rbrace$ <em>(This is called the</em> $\delta$ <em>fattening of the set F)</em>. Consider the function $f_{\epsilon}(x)=\left(1-\frac{d(x,F)}{\epsilon}\right)_{+}$. This function is uniformly continuous function and $F^{\delta}\downarrow F$ as $\delta\downarrow 0$. Now, we can show easily that $$
+\mathbf{1}_F\le f_{\epsilon} \le \mathbf{1}_{F^{\epsilon}}
+$$ Using this we can say that $$
+\limsup_{n\rightarrow \infty} \Pb(X_n \in F)\le \limsup_{n\rightarrow \infty} \Eb[f(X_n)]\rightarrow \Eb f[X]\le \Pb(X \in F^{\epsilon}) \downarrow \Pb(X\in F)
+$$</p>
+<p><strong>v $\Longleftrightarrow$ vi</strong></p>
+<p>Using the fact that if $F$ is closed $F^c$ is open and vice versa.</p>
+<p><strong>v.+vi. $\implies$ vii.</strong></p>
+<p>We know that $\bar{B}=B^{\circ}\bigcup \delta B$. $B^{\circ}$ is an open set. Then we shall have $$
+\begin{align*}
+&amp; \Pb(X\in B^{\circ})\le \liminf_{n\rightarrow \infty} \Pb(X_n \in B^{\circ})\le \limsup_{n\rightarrow \infty} \Pb(X_n \in \bar{B}) \le \Pb(X\in \bar{B})\tag{$\star$} \\
+&amp; \Pb(X\in B^{\circ})\le \Pb(X\in B)\le \Pb(X\in \bar{B})\tag{$\star\star$}
+\end{align*}
+$$ As, $\Pb(X\in \delta B)=0$, $\Pb(X\in B^{\circ})=\Pb(X\in \bar{B})$, the equality follows in $\star$ amd $\star\star$. Hence the result follows.</p>
+<p><strong>vii. $\implies$ i.</strong></p>
+<p>This follows trivially as we apply vii. with $B=(-\infty,x]$, where $\delta B=\lbrace x\rbrace$ and $x$ is a continuity point of $F_X$.</p>
+
+  </div>
+
+  <div class="proof-end">□</div>
+</details>
+ Portmanteau theorem is a useful theorem as we shall see and we shall be using the equivalent conditions of the week convergence now and then. The next theorem is continuous mapping theorem 
+
+
+
+
+
+
+
+
+
+
+
+<div class="thm-block theorem" id="thm-CMT ">
+  <div class="thm-title">
+    Theorem 1.6: Continuous Mapping Theorem
+  </div>
+  <div class="thm-body"><p>Let, $X_n\in \R^k$ and $g$ be function from $\R^k$ to $\R^m$. Let, $D_g=\lbrace x\in \R^k: \text{ $g$ is discontinuous at $x$}\rbrace$. Let, $\Pb(X\in D_g)=0$. Then,</p>
+<ol type="i">
+<li>
+$X_n\xrightarrow{d}X \implies g(X_n)\xrightarrow{d}g(X)$;
+<li>
+$X_n\xrightarrow{P}X \implies g(X_n)\xrightarrow{P}g(X)$;
+<li>
+$X_n\xrightarrow{\text{a.s.}}X \implies g(X_n)\xrightarrow{\text{a.s.}}g(X)$;
+<ol></div>
+</div>
+</p>
+
+
+
+<details class="proof-block" open>
+  <summary class="proof-title">Proof.</summary>
+
+  <div class="proof-body">
+    <p><strong>iii.</strong> Note, that $\{X_n \rightarrow g(X)\}\subset \{g(X_n) \rightarrow g(X)\}\cup \{X \in D_g\}$. Hence, $ \Pb(g(X_n) \rightarrow g(X))+\Pb(X \in D_g) \ge (X_n \rightarrow X)=1 $. Hence, we have $\Pb(g(X_n)\rightarrow g(X))=1$. Thus $g(X_n)\asconv g(X)$.</p>
+<p><strong>ii.</strong> We know that $X_n\pconv X$ iff for every subsequence there exists a further subsequence with converges to the limiting distribution almost surely. Therefore, $$
+\begin{align*}
+&amp; \exists \lbrace n_{k_i}\rbrace:\quad X_{n_{k_i}}\asconv X, \\
+\therefore\quad &amp; \exists \lbrace n_{k_i}\rbrace:\quad g(X_{n_{k_i}})\asconv g(X)\\
+\therefore\quad &amp; g(X_n)\pconv g(X)
+\end{align*}
+$$</p>
+<p><strong>i.</strong> Let $F$ be a closed set. As $X_n\dconv X$, by Portmanteau theorem we know that $\limsup\limits_{n\rightarrow \infty}\Pb(X_n\in F)\le \Pb(X\in F)$.</p>
+<p>Now, $g^{-1}(F)$ may not be a closed set as we are not given the continuity of $g$. But $\overline{g^{-1}(F)}$</p>
+
+  </div>
+
+  <div class="proof-end">□</div>
+</details>
+
+
+    </div>
+  </article>
+</main>
+
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2026 <a href="https://avi48437.github.io/">Avi | Personal Website</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu');
+    if (menu) {
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            html.dataset.theme = 'dark';
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

@@ -1,0 +1,28 @@
+---
+title: "Advanced Statistical Computing II (WASHU Notes)"
+author:
+- name: Avinandan Roy
+engine: knitr
+date: 2026-01-10
+math: true
+katex_macros:
+  '\ind': '\operatorname{IND}'
+  '\asconv': '\xrightarrow{\text{a.s.}}'
+  '\pconv': '\xrightarrow{P}'
+  '\dconv': '\xrightarrow{d}'
+  '\lrconv': '\xrightarrow{L_r}'
+format:
+  hugo-md:
+    wrap: none
+    toc: true
+    code-fold: true
+bibliography: refs.bib
+citeproc: true
+link-citations: true
+reference-location: document
+nocite: '@*'
+execute:
+  echo: true
+  warning: false
+  message: false
+---

@@ -237,3 +237,12 @@ quarto render content/notes/page/index.qmd --to hugo-md
 RUN LOCAL SERVER:
 HOW TO WRITE:
 hugo server --disableFastRender --ignoreCache --noHTTPCache
+
+-----------------------------------------------------
+11. Equation Numbering
+-----------------------------------------------------
+<ol type="i">
+  <li>$X_n\asconv X \implies X_n\pconv X$</li>
+  <li>$X_n\pconv X\implies X_n\dconv X$</li>
+  <li>$X_n\lrconv X\implies X_n\pconv X$</li>
+</ol>

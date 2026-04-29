@@ -38,6 +38,147 @@ In this study, there are 98 healthy human subjects involved. Other covariates ar
 
 The trees considered here are binary trees with roots, where one particular node is designated as the **root**, and the **level** of a node is the total number of edges along the path of the root. For example, the level of the root node is zero. Between each pair of nodes connected by an edge, the one with the higher level is the **child**, and the other is the **parent** of the child node. A node with no children is called a **leaf** node. The set of all possible rooted binary trees is called the binary tree space and is denoted by $\mathcal{T}$.
 
+<details class="code-fold">
+<summary>Code</summary>
+
+``` r
+library(igraph)
+
+# Main Functions to create the rooted Binary Graphs
+make_tree_graph <- function(nodes) {
+  edges <- c()
+  for (i in nodes) {
+    parent <- floor(i / 2)
+    if (parent %in% nodes) {
+      edges <- c(edges, parent, i)
+    }
+  }
+  graph(edges = edges, directed = TRUE)
+}
+tree_layout <- function(g) {
+  ids <- as.numeric(V(g)$name)
+  levels <- floor(log2(ids))
+  x <- (ids - 2^levels) / 2^levels
+  y <- -levels
+  cbind(x, y)
+}
+add_missing_children <- function(nodes) {
+  dashed_edges <- c()
+  dashed_nodes <- c()
+  
+  for (p in nodes) {
+    left <- 2 * p
+    right <- 2 * p + 1
+    
+    if (!(left %in% nodes)) {
+      dashed_edges <- c(dashed_edges, p, left)
+      dashed_nodes <- c(dashed_nodes, left)
+    }
+    if (!(right %in% nodes)) {
+      dashed_edges <- c(dashed_edges, p, right)
+      dashed_nodes <- c(dashed_nodes, right)
+    }
+  }
+  
+  list(edges = dashed_edges, nodes = dashed_nodes)
+}
+draw_tree_paper_igraph <- function(present_nodes,name) {
+  
+  # ---- solid edges ----
+  solid_edges <- c()
+  for (i in present_nodes) {
+    parent <- floor(i / 2)
+    if (parent %in% present_nodes) {
+      solid_edges <- c(solid_edges, parent, i)
+    }
+  }
+  
+  # ---- dashed edges (missing children, one level only) ----
+  dashed_edges <- c()
+  dashed_nodes <- c()
+  
+  for (p in present_nodes) {
+    for (child in c(2*p, 2*p + 1)) {
+      if (!(child %in% present_nodes)) {
+        dashed_edges <- c(dashed_edges, p, child)
+        dashed_nodes <- c(dashed_nodes, child)
+      }
+    }
+  }
+  
+  # ---- all vertices ----
+  all_nodes <- sort(unique(c(present_nodes, dashed_nodes)))
+  all_nodes_chr <- as.character(all_nodes)
+  
+  # ---- create EMPTY graph ----
+  g <- make_empty_graph(n = length(all_nodes), directed = TRUE)
+  V(g)$name <- all_nodes_chr
+  
+  # ---- add edges ----
+  if (length(solid_edges) > 0) {
+    g <- add_edges(g, as.character(solid_edges))
+  }
+  if (length(dashed_edges) > 0) {
+    g <- add_edges(g, as.character(dashed_edges))
+  }
+  
+  # ---- edge styles ----
+  E(g)$lty <- c(
+    rep(1, length(solid_edges) / 2),
+    rep(2, length(dashed_edges) / 2)
+  )
+  E(g)$width <- 4   # 🔴 bold edges
+  
+  # ---- vertex styles ----
+  V(g)$shape <- "circle"
+  V(g)$size  <- 20
+  V(g)$label <- V(g)$name
+  V(g)$color <- "white"
+  V(g)$frame.width <- 2.5  # 🔴 bold node borders
+  
+  present_idx <- V(g)$name %in% as.character(present_nodes)
+  V(g)$shape[present_idx] <- "square"
+  V(g)$size[present_idx]  <- 20
+  
+  # ---- layout ----
+  ids <- as.numeric(V(g)$name)
+  levels <- floor(log2(ids))
+  x <- (ids - 2^levels) / 2^levels
+  y <- -levels
+  layout <- cbind(x, y)
+  
+  # ---- plot ----
+  plot(
+    g,
+    layout = layout,
+    edge.arrow.mode = 0,
+    vertex.label.cex = 1.5,
+    vertex.label.font = 2,
+    vertex.label.color = "black",
+    edge.color = "blue"
+  )
+  mtext(
+    name,
+    side = 1,      # bottom
+    line = 2,      # distance from plot
+    cex = 2,
+    font = 4
+  )
+}
+
+# Examples 
+par(mfrow = c(2, 2))
+
+draw_tree_paper_igraph(c(1, 2, 4),"t1")
+draw_tree_paper_igraph(c(1, 2, 3, 4, 6),"t2")
+draw_tree_paper_igraph(c(1, 2, 3, 5, 7),"t3")
+draw_tree_paper_igraph(c(1, 2, 3),"t4")
+```
+
+</details>
+
+<img src="index.markdown_strict_files/figure-markdown_strict/trees-1.png" style="width:100.0%" data-fig-align="center" />
+
 These trees are some examples of rooted binary trees. *Level-order index* has been used as described in Wang and Marron ([2007](#ref-Wang2007OODA)) to uniquely identify each node of a binary tree. In the above figure, the example trees with different level-order index sets are as follows:
 
 $$

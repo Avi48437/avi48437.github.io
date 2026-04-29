@@ -1,0 +1,182 @@
+---
+title: "Advanced Statistical Computing II (WASHU Notes)"
+author:
+- name: Avinandan Roy
+engine: knitr
+date: 2026-01-10
+math: true
+katex_macros:
+  '\ind': '\operatorname{IND}'
+  '\asconv': '\xrightarrow{\text{a.s.}}'
+  '\pconv': '\xrightarrow{P}'
+  '\dconv': '\xrightarrow{d}'
+  '\lrconv': '\xrightarrow{L_r}'
+format:
+  hugo-md:
+    wrap: none
+    toc: true
+    code-fold: true
+bibliography: refs.bib
+citeproc: true
+link-citations: true
+reference-location: document
+nocite: '@*'
+execute:
+  echo: true
+  warning: false
+  message: false
+---
+
+### What is an Optimization Problem?
+
+Let us first formally define what we mean by an optimization problem first.
+{{< definition title = "Definition 1.1: Optimization Problem" label= "def-1.1 ">}}
+An optimization problem consists of 
+
+- a decision variable $\theta \in \R^p$,
+- a feasible  set $\Theta \subset \R^p$,
+- an objective function $f:\R^p\rightarrow \R\cup\lbrace \pm \infty \rbrace$ and
+- finding $\argmin\limits_{\theta \in \Theta} f(\theta)$
+
+This $f(\theta)$ is called the objective value and $\theta$ is a candidate solution.
+{{< /definition >}}
+
+{{< example title = "Example 1.1: OLS" label ="exp-1.1" >}}
+An example of such optimization problem is - *Ordinary Least Square Solution of Linear Regression*. Note that we have the model $Y=X\beta +\epsilon$. Here the decision variable is $\beta$, the feasible set is $\R^p$ and the objective function is the $L_2$ loss between $Y$ and $X\beta$, which is $||Y-X\beta||^2\_2$
+{{< /example >}}
+
+
+Now, we shall discuss what about constrained vs. unconstrained Optimization. For that let us first define what we call an indicator function 
+{{< definition title = "Definition 1.2: Indicator Function" label="def-1.2" >}}
+The indicator function $i_{\Theta}:\Theta\rightarrow \lbrace 0,\infty\rbrace$ such that 
+$$
+i_{\Theta}(\theta)=\begin{cases}
+                          0,\quad\theta \in \Theta \\\
+                          \infty,\quad \theta \notin \Theta
+                         \end{cases}
+$$
+Suppose then the constrained space is $\Theta^{\*}\subset \Theta$. We can then write that 
+$$
+\min_{\theta \in \Theta}f(\theta)\Leftrightarrow \min_{\theta \in \Theta^{\*}}f(\theta)+i_{\Theta}(\theta)
+$$ 
+{{< /definition >}}
+
+### Global, Local, Stationary points 
+Now, it may be possible that in a minimization problem more than one mode exits for the objective function. In that case we define the *Global Minimizer, Local Minimizer* and to find out the existence of the optimizers, we find where the slope of the objective function becomes zero and hence we define the *Stationary Point*
+
+{{< definition title = "Definition 1.3: Global Minimizer, Local Minimizer, Stationary Point" >}}
+
+- a point $\theta^{\*}$ is called the **Global Minimizer** if,
+$$
+\boxed{f(\theta^{\*})\le f(\theta),\quad \forall \theta\in \Theta}
+$$
+- a point $\theta^{\*}$ is called the **Local Minimizer** if,
+$$
+\boxed{\exists \enspace r>0\text{ such that  } f(\theta^{*})\le f(\theta)\enspace \forall \theta\in B(\theta^{\*},r)\cap \Theta}
+$$
+  where $B(\theta,r)=\rbrace \phi: ||\theta-\phi||\le r\rbrace$,
+- a point $\theta^{\*}$ is called a **Stationary Point** if $f$ is differentiable at $\theta^{\*}$ and satisfies
+$$
+\boxed{\nabla f(\theta^{\*})=0}
+$$  
+{{< /definition >}}
+We can similarly define the *Global Maximizer* and *Local Maximizer*. 
+
+### Existence: Why Solutions exists or not?
+Semicontinuous functions are at the heart of this topic. So, we will first define what is semicontinuity. We will define both lower semicontinuous function and upper semicontinuous function here.
+{{< definition title = "Definition 1.4: Lower Semicontinuous (LSC) and Upper Semicontinuous (USC) functions" >}}
+Let, $(\Theta,d)$ be a metric space abd $f:\Theta\rightarrow \R$. The function $f$ is **lower semicontinuous** at $\theta \in \Theta$ if for every sequence $\lbrace\theta_n\rbrace$ such that $\theta_n\rightarrow \theta$, we have 
+$$
+f(\theta)\le \liminf_{n\rightarrow \infty}f(\theta_n)
+$$ 
+and $f$ is **upper semicontinuous** at $\theta \in \Theta$ if for every sequence $\lbrace\theta_n\rbrace$ such that $\theta_n\rightarrow \theta$, we have 
+$$
+f(\theta)\ge \limsup_{n\rightarrow \infty}f(\theta_n)
+$$
+{{< /definition >}}
+Here are couple of more definitions below
+{{< definition title = "Definition 1.5: Coercive function" label="def-1.5" >}}
+A function $f:\Theta\rightarrow \R$ is **coercive** if $||\theta||\rightarrow \infty\enspace \implies f(\theta)\rightarrow \infty$
+{{< /definition >}}
+
+{{< definition title = "Definition 1.6: Closed Set" label="def-1.6" >}}
+Let, $(\Theta,d)$ be a metric space. $\Theta$ is said to be a closed set if for every sequence $\lbrace \theta_n \rbrace \subset \Theta$, such that $\theta_n\rightarrow \theta$, we have $\theta\in \Theta$.
+{{< /definition >}}
+
+{{< definition title = "Definition 1.7: Compact Set (Heine-Borel)" label="def-1.7" >}}
+$\Theta$ is compact if is closed and bounded. (*Note that this characterization works only when the underlying space is finite-dimensional.*). The **sequential definition** of compactness is as follows: $\Theta$ is compact iff every sequence in $\Theta$ has a further subsequence with converges to limit point inside $\Theta$.
+{{< /definition >}}
+
+{{< theorem title " Theorem 1.1: Existence of minimizers on closed sets " >}}
+Let, $\Theta$ be nonempty and closed. Assume $f:\Theta\rightarrow \R$ is lower semicontinuous on $\Theta$ and either $\Theta$ is compact or $f$ is coercive on $\Theta$, then the problem $\min\limits_{\theta\in \Theta}f(\theta)$ attains a minimizer.
+{{< /theorem >}}
+{{< proof >}}
+**case 2**
+
+Given that $\Theta$ is closed and $f$ is coercive. Let, us first define the level sets.
+$$
+L_c=\lbrace \theta\in\Theta : f(\theta)\le c\rbrace
+$$
+Note that $L_c$ is bounded for all c. If not bounded then then due to coerciveness when $||\theta||\rightarrow \infty$ inside $L_c$, $f(\theta)\rightarrow \infty$. But this contradicts the condition inside $L_c$, that $f(\theta)\le c$. Therefore, $L_c$ is a bounded set. Let $\lbrace \theta_n\rbrace$ a sequence such that $\theta_n\rightarrow \theta$. As $f$ is lower semicontinuous, $\liminf\limits_{n\rightarrow \infty}f(\theta_n)\ge f(\theta)$. Therefore $f(\theta)\le c$ and as $\Theta$ is closed, $\theta \in L_c$. So, $L_c$ is closed and bounded and hence $L_c$ is compact.  
+
+Let, $m=\inf f(\theta)$. Consider a sequence $\lbrace \theta_k\rbrace\subset \Theta$ such that $f(\theta_k)\downarrow m$. Now there will exist $K$ such that for all $k\ge K$, $f(\theta_k)\le m+1$. Hence $\lbrace \theta_l\rbrace\_{l\ge K}\subset L_{m+1}$. As $L_{m+1}$ is compact this sequence $\lbrace \theta_l\rbrace\_{l\ge K}$ will have a further subsequence, $\lbrace \theta^{\'}_k\rbrace$ that will converge to a limit point $\theta^{\*}$.
+
+Hence, by lower semicontinuity of $f$, we shall get the following 
+$$
+f(\theta^{\*})\le \liminf_{k\rightarrow \infty}f(\theta'_k)=m
+$$
+{{< /proof >}}
+{{< example title = "Example 1.2" >}}
+Let, $\Theta = (0,1)$ and $f(\theta)=\theta$. Note that the minimizer does not exist in $\Theta$.
+{{< /example >}}
+
+Many estimators are defined as solutions to optimize problems like $\min\limits_{\theta \in \Theta}f(\theta)$. Existence theorems are nice but they don't tell us anything about how to solve the problem. 
+
+{{< definition title = "Definition 1.8: Convex Set" label="def-1.8" >}}
+A set $\Theta \subset \R^n$ is convex if  for $\theta_1,\theta_2\in \Theta$ and for all $\lambda\in (0,1)$, 
+$$
+(1-\lambda)\theta_1+\lambda\theta_2\in \Theta
+$$
+{{< /definition >}}
+{{< example title ="Example 1.3: Hyperplanes are convex" >}}
+Let $\Theta=\lbrace \theta: a^T\theta=b\rbrace$, Prove that $\Theta$ is convex.
+
+Let $\theta_1,\theta_2 \in \Theta$. Therefore, $a^T\theta_1=b$ and $a^T\theta_2=b$. Take $\lambda \in (0,1)$. $\therefore$ $a^T((1-\lambda)\theta_1+\lambda\theta_2)=(1-\lambda)b+\lambda b=b$. Hence, $((1-\lambda)\theta_1+\lambda\theta_2)\in \Theta$. So, $\Theta$ is convex. 
+{{< /example >}}
+
+{{< definition title = "Definition 1.9: Convex function" label="def-1.9" >}}
+Let $\Theta$ be convex. Let $f:\Theta \rightarrow \R$ be a differentiable function. Then $f$ is convex if $\forall \theta_1,\theta_2\in \Theta$, $\lambda\in (0,1)$,
+$$
+f(\lambda\theta_1+(1-\lambda)\theta_2)\le \lambda f(\theta_1)+(1-\lambda)f(\theta_2)
+$$
+
+An equivalent definition can be given. With $\Theta$ convex and $f$ differentiable, $f$ is convex iff $f(\theta_2)\ge f(\theta_1)+\nabla f(\theta_1)^T(\theta_2-\theta_1)$
+{{< /definition >}}
+{{< proof title = "Proof of the first order characterization" >}}
+$\Rightarrow$
+
+We know that $\forall \quad \theta_1,\theta_2\in\Theta$ and $\lambda\in(0,1)$, we have the following 
+$$
+\begin{aligned}
+& \lambda f(\theta_2)+(1-\lambda)f(\theta_1)\ge f(\lambda\theta_2+(1-\lambda)\theta_1)\\\
+\implies & \lambda(f(\theta_2)-f(\theta_1))\ge f(\lambda\theta_2+(1-\lambda)\theta_1)-f(\theta_1)\\\
+\implies & \lambda(f(\theta_2)-f(\theta_1))\ge f(\theta_1+\lambda(\theta_2-\theta_1))-f(\theta_1)\\\
+\implies & f(\theta_2)-f(\theta_1)\ge \frac{f(\theta_1+\lambda(\theta_2-\theta_1))-f(\theta_1)}{\lambda}\\\
+\implies & f(\theta_2)-f(\theta_1)\ge ||\theta_2-\theta_1||_2\left(\frac{f(\theta_1+\lambda(\theta_2-\theta_1))-f(\theta_1)-\nabla f(\theta_1)^T(theta_2-\theta_1)}{\lambda}\right)\\
+\end{aligned}
+$$
+Now, if we take $\lambda\rightarrow 0$, then the right hand side will converge to $\nabla f(\theta_1)$. 
+Therefore, we have the desired result.
+
+$\Leftarrow$
+ Let,  $\theta_1,\theta_2\in \Theta$. Then we are given that $f(\theta_2)\ge f(\theta_1)+\nabla f(\theta_1)^T(\theta_2-\theta_1)$. 
+
+ Let, $\theta_{\lambda}=(1-\lambda)\theta_1+\lambda\theta_2$, when $\lambda\in (0,1)$ is fixed.Then, we can say that
+ $$
+ \begin{aligned}
+ & f(\theta_1)\ge f(\theta_{\lambda})+\nabla f(\theta_{\lambda})   (\theta_1-\theta_{\lambda})\\\
+ & f(\theta_2)\ge f(\theta_{\lambda})+\nabla f(\theta_{\lambda})(\theta_2-\theta_{\lambda})\\\
+ \therefore & \lambda f(\theta_1)+(1-\lambda)f(\theta_2)\ge f(\theta_{\lambda})+\nabla f(\theta_1)^T
+ \end{aligned}
+ $$
+{{< /proof >}}

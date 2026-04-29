@@ -1,0 +1,5 @@
+<div class="pdf-note-page">
+  <iframe src="{{ .Get "src" | relURL }}" class="pdf-frame"></iframe>
+</div>
+
+<p><a href="{{ .Get "src" | relURL }}" target="_blank">Open PDF in new tab</a></p>

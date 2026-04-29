@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto" data-theme="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Lecture 1: Optimization Basics and Existence of Solutions | Avi | Personal Website</title>
+<meta name="keywords" content="">
+<meta name="description" content="Defines optimization problems and key concepts (global/local minima, stationary points), and gives conditions—via lower semicontinuity, compactness, or coercivity—under which minimizers exist, with implications for statistical estimation and algorithms.">
+<meta name="author" content="">
+<link rel="canonical" href="https://avi48437.github.io/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-01/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.343cc480b9ffc8f04ccbe5e968ad674880cab773ec19905e93033065c1e7a804.css" integrity="sha256-NDzEgLn/yPBMy&#43;XpaK1nSIDKt3PsGZBekwMwZcHnqAQ=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://avi48437.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://avi48437.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://avi48437.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://avi48437.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://avi48437.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="https://avi48437.github.io/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-01/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+                color-scheme: dark;
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .toc {
+                background: var(--entry);
+            }
+        }
+
+        @media (prefers-color-scheme: light) {
+            .list::-webkit-scrollbar-thumb {
+                border-color: var(--code-bg);
+            }
+        }
+
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else if (localStorage.getItem("pref-theme") === "light") {
+       document.querySelector("html").dataset.theme = 'light';
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script><link rel="stylesheet" href="/css/custom.min.ff270f8df3ba879fe9ef07b3c5b55007ad732c159f9c276596d2edd63d8da1e0.css"><script defer src="/js/nav-overflow.min.86e3c6af6c08bfe941e6868d1b70b3609d659d92391e95aeec96e30a5006877d.js"></script>
+
+
+  <link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
+/>
+
+<script
+  defer
+  src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js">
+</script>
+
+<script
+  defer
+  src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js">
+</script>
+
+<script>
+(function () {
+  const KATEX_MACROS = {
+    "\\R": "\\mathbb{R}",
+    "\\Eb": "\\mathbb{E}",
+    "\\Pb": "\\mathbb{P}",
+    "\\Var": "\\operatorname{Var}",
+    "\\Cov": "\\operatorname{Cov}",
+    "\\argmin": "\\operatorname*{arg\\,min}",
+    "\\argmax": "\\operatorname*{arg\\,max}",
+    "\\SubG": "\\text{Sub-Gaussian}",
+    "\\SubE": "\\text{Sub-Exponential}",
+    "\\Perp": "\\perp\\!\\!\\!\\perp",
+    "\\ceil": "\\left\\lceil #1 \\right\\rceil",
+    "\\floor": "\\left\\lfloor #1 \\right\\rfloor"
+  };
+
+  const PAGE_MACROS = {"\\asconv":"\\xrightarrow{\\text{a.s.}}","\\dconv":"\\xrightarrow{d}","\\ind":"\\operatorname{IND}","\\lrconv":"\\xrightarrow{L_r}","\\pconv":"\\xrightarrow{P}"};
+  Object.assign(KATEX_MACROS, PAGE_MACROS);
+
+  function stripMathDelims(s) {
+    return s
+      .replace(/^\\\(/, "")
+      .replace(/\\\)$/, "")
+      .replace(/^\\\[/, "")
+      .replace(/\\\]$/, "");
+  }
+
+  function renderPandocMathSpans() {
+    const inlineSpans = document.querySelectorAll("span.math.inline");
+    inlineSpans.forEach(el => {
+      if (el.querySelector(".katex")) return; 
+      const tex = stripMathDelims(el.textContent.trim());
+      try {
+        katex.render(tex, el, {
+          displayMode: false,
+          throwOnError: false,
+          macros: KATEX_MACROS
+        });
+      } catch (_) {}
+    });
+
+    const displaySpans = document.querySelectorAll("span.math.display");
+    displaySpans.forEach(el => {
+      if (el.querySelector(".katex")) return; 
+      const tex = stripMathDelims(el.textContent.trim());
+      try {
+        katex.render(tex, el, {
+          displayMode: true,
+          throwOnError: false,
+          macros: KATEX_MACROS
+        });
+      } catch (_) {}
+    });
+  }
+
+  function renderDelimiterMath() {
+    if (typeof renderMathInElement !== "function") return;
+    renderMathInElement(document.body, {
+      delimiters: [
+        { left: "$$", right: "$$", display: true },
+        { left: "$",  right: "$",  display: false },
+        { left: "\\(", right: "\\)", display: false },
+        { left: "\\[", right: "\\]", display: true }
+      ],
+      throwOnError: false,
+      macros: KATEX_MACROS,
+      
+      ignoredTags: ["script","noscript","style","textarea","pre","code","option"],
+      ignoredClasses: ["katex", "math"]
+    });
+  }
+
+  
+  function boot() {
+    if (!window.katex || typeof window.renderMathInElement !== "function") {
+      setTimeout(boot, 30);
+      return;
+    }
+    
+    renderDelimiterMath();
+    renderPandocMathSpans();
+  }
+
+  document.addEventListener("DOMContentLoaded", boot);
+})();
+</script>
+
+
+<meta property="og:url" content="https://avi48437.github.io/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-01/">
+  <meta property="og:site_name" content="Avi | Personal Website">
+  <meta property="og:title" content="Lecture 1: Optimization Basics and Existence of Solutions">
+  <meta property="og:description" content="Defines optimization problems and key concepts (global/local minima, stationary points), and gives conditions—via lower semicontinuity, compactness, or coercivity—under which minimizers exist, with implications for statistical estimation and algorithms.">
+  <meta property="og:locale" content="en-us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="notes">
+    <meta property="article:published_time" content="2026-01-10T00:00:00+00:00">
+    <meta property="article:modified_time" content="2026-01-10T00:00:00+00:00">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Lecture 1: Optimization Basics and Existence of Solutions">
+<meta name="twitter:description" content="Defines optimization problems and key concepts (global/local minima, stationary points), and gives conditions—via lower semicontinuity, compactness, or coercivity—under which minimizers exist, with implications for statistical estimation and algorithms.">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Notes",
+      "item": "https://avi48437.github.io/notes/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  4 ,
+      "name": "Lecture 1: Optimization Basics and Existence of Solutions",
+      "item": "https://avi48437.github.io/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-01/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Lecture 1: Optimization Basics and Existence of Solutions",
+  "name": "Lecture 1: Optimization Basics and Existence of Solutions",
+  "description": "Defines optimization problems and key concepts (global/local minima, stationary points), and gives conditions—via lower semicontinuity, compactness, or coercivity—under which minimizers exist, with implications for statistical estimation and algorithms.",
+  "keywords": [
+    
+  ],
+  "articleBody": "What is an Optimization Problem? Let us first formally define what we mean by an optimization problem first. Definition 1.1: Optimization Problem An optimization problem consists of\na decision variable $\\theta \\in \\R^p$, a feasible set $\\Theta \\subset \\R^p$, an objective function $f:\\R^p\\rightarrow \\R\\cup\\lbrace \\pm \\infty \\rbrace$ and finding $\\argmin\\limits_{\\theta \\in \\Theta} f(\\theta)$ This $f(\\theta)$ is called the objective value and $\\theta$ is a candidate solution.\nExample 1.1: OLS An example of such optimization problem is - Ordinary Least Square Solution of Linear Regression. Note that we have the model $Y=X\\beta +\\epsilon$. Here the decision variable is $\\beta$, the feasible set is $\\R^p$ and the objective function is the $L_2$ loss between $Y$ and $X\\beta$, which is $||Y-X\\beta||^2_2$ Now, we shall discuss what about constrained vs. unconstrained Optimization. For that let us first define what we call an indicator function Definition 1.2: Indicator Function The indicator function $i_{\\Theta}:\\Theta\\rightarrow \\lbrace 0,\\infty\\rbrace$ such that $$ i_{\\Theta}(\\theta)=\\begin{cases} 0,\\quad\\theta \\in \\Theta \\\\ \\infty,\\quad \\theta \\notin \\Theta \\end{cases} $$ Suppose then the constrained space is $\\Theta^{*}\\subset \\Theta$. We can then write that $$ \\min_{\\theta \\in \\Theta}f(\\theta)\\Leftrightarrow \\min_{\\theta \\in \\Theta^{*}}f(\\theta)+i_{\\Theta}(\\theta) $$ Global, Local, Stationary points Now, it may be possible that in a minimization problem more than one mode exits for the objective function. In that case we define the Global Minimizer, Local Minimizer and to find out the existence of the optimizers, we find where the slope of the objective function becomes zero and hence we define the Stationary Point\nDefinition 1.3: Global Minimizer, Local Minimizer, Stationary Point a point $\\theta^{*}$ is called the Global Minimizer if, $$ \\boxed{f(\\theta^{*})\\le f(\\theta),\\quad \\forall \\theta\\in \\Theta} $$ a point $\\theta^{*}$ is called the Local Minimizer if, $$ \\boxed{\\exists \\enspace r\u003e0\\text{ such that } f(\\theta^{*})\\le f(\\theta)\\enspace \\forall \\theta\\in B(\\theta^{*},r)\\cap \\Theta} $$ where $B(\\theta,r)=\\rbrace \\phi: ||\\theta-\\phi||\\le r\\rbrace$, a point $\\theta^{*}$ is called a Stationary Point if $f$ is differentiable at $\\theta^{*}$ and satisfies $$ \\boxed{\\nabla f(\\theta^{*})=0} $$ We can similarly define the Global Maximizer and Local Maximizer.\nExistence: Why Solutions exists or not? Semicontinuous functions are at the heart of this topic. So, we will first define what is semicontinuity. We will define both lower semicontinuous function and upper semicontinuous function here. Definition 1.4: Lower Semicontinuous (LSC) and Upper Semicontinuous (USC) functions Let, $(\\Theta,d)$ be a metric space abd $f:\\Theta\\rightarrow \\R$. The function $f$ is lower semicontinuous at $\\theta \\in \\Theta$ if for every sequence $\\lbrace\\theta_n\\rbrace$ such that $\\theta_n\\rightarrow \\theta$, we have $$ f(\\theta)\\le \\liminf_{n\\rightarrow \\infty}f(\\theta_n) $$ and $f$ is upper semicontinuous at $\\theta \\in \\Theta$ if for every sequence $\\lbrace\\theta_n\\rbrace$ such that $\\theta_n\\rightarrow \\theta$, we have $$ f(\\theta)\\ge \\limsup_{n\\rightarrow \\infty}f(\\theta_n) $$ Here are couple of more definitions below Definition 1.5: Coercive function A function $f:\\Theta\\rightarrow \\R$ is coercive if $||\\theta||\\rightarrow \\infty\\enspace \\implies f(\\theta)\\rightarrow \\infty$ Definition 1.6: Closed Set Let, $(\\Theta,d)$ be a metric space. $\\Theta$ is said to be a closed set if for every sequence $\\lbrace \\theta_n \\rbrace \\subset \\Theta$, such that $\\theta_n\\rightarrow \\theta$, we have $\\theta\\in \\Theta$. Definition 1.7: Compact Set (Heine-Borel) $\\Theta$ is compact if is closed and bounded. (Note that this characterization works only when the underlying space is finite-dimensional.). The sequential definition of compactness is as follows: $\\Theta$ is compact iff every sequence in $\\Theta$ has a further subsequence with converges to limit point inside $\\Theta$. Theorem 1.1: Existence of minimizers on closed sets Let $\\Theta$ be nonempty and closed. Assume $f:\\Theta\\rightarrow \\R$ is lower semicontinuous on $\\Theta$ and either $\\Theta$ is compact or $f$ is coercive on $\\Theta$, then the problem $\\min\\limits_{\\theta\\in \\Theta}f(\\theta)$ attains a minimizer. Proof. case 2\nGiven that $\\Theta$ is closed and $f$ is coercive. Let, us first define the level sets. $$ L_c=\\lbrace \\theta\\in\\Theta : f(\\theta)\\le c\\rbrace $$ Note that $L_c$ is bounded for all c. If not bounded then then due to coerciveness when $||\\theta||\\rightarrow \\infty$ inside $L_c$, $f(\\theta)\\rightarrow \\infty$. But this contradicts the condition inside $L_c$, that $f(\\theta)\\le c$. Therefore, $L_c$ is a bounded set. Let $\\lbrace \\theta_n\\rbrace$ a sequence such that $\\theta_n\\rightarrow \\theta$. As $f$ is lower semicontinuous, $\\liminf\\limits_{n\\rightarrow \\infty}f(\\theta_n)\\ge f(\\theta)$. Therefore $f(\\theta)\\le c$ and as $\\Theta$ is closed, $\\theta \\in L_c$. So, $L_c$ is closed and bounded and hence $L_c$ is compact.\nLet, $m=\\inf f(\\theta)$. Consider a sequence $\\lbrace \\theta_k\\rbrace\\subset \\Theta$ such that $f(\\theta_k)\\downarrow m$. Now there will exist $K$ such that for all $k\\ge K$, $f(\\theta_k)\\le m+1$. Hence $\\lbrace \\theta_l\\rbrace_{l\\ge K}\\subset L_{m+1}$. As $L_{m+1}$ is compact this sequence $\\lbrace \\theta_l\\rbrace_{l\\ge K}$ will have a further subsequence, $\\lbrace \\theta^{'}_k\\rbrace$ that will converge to a limit point $\\theta^{*}$.\nHence, by lower semicontinuity of $f$, we shall get the following $$ f(\\theta^{*})\\le \\liminf_{k\\rightarrow \\infty}f(\\theta’_k)=m $$\n□ Example 1.2 Let, $\\Theta = (0,1)$ and $f(\\theta)=\\theta$. Note that the minimizer does not exist in $\\Theta$. Many estimators are defined as solutions to optimize problems like $\\min\\limits_{\\theta \\in \\Theta}f(\\theta)$. Existence theorems are nice but they don’t tell us anything about how to solve the problem.\nIn statistical computation, estimation problems are typically formulated as the minimization of an objective function (e.g., a negative log-likelihood or penalized loss) over a parameter space. Numerical algorithms implicitly assume that this optimization problem is well posed, meaning that a minimizer exists and can be approximated by iterative procedures. The following theorem provides conditions under which this assumption is mathematically justified.\nExistence of estimators: Ensures that statistical objectives attain a minimizer, rather than merely an unattained infimum. Stability of numerical algorithms: Compactness or coercivity prevents minimizing sequences from diverging to infinity, avoiding numerical blow-up. Role of regularization and priors: Penalties and Bayesian priors enforce coercivity, resolving non-existence pathologies in MLEs (e.g., separation or variance collapse). Feasibility of algorithmic limits: Closedness of the parameter space guarantees that limits of convergent iterates remain admissible. Meaningful convergence diagnostics: Lower semicontinuity ensures that convergence of objective values corresponds to convergence toward a valid minimizer. Foundation for algorithmic guarantees: Provides the mathematical conditions implicitly required by EM, SAEM, gradient descent, and second-order optimization methods. ",
+  "wordCount" : "974",
+  "inLanguage": "en",
+  "datePublished": "2026-01-10T00:00:00Z",
+  "dateModified": "2026-01-10T00:00:00Z",
+  "author":[{
+    "@type": "Person",
+    "name": {"name":"Avinandan Roy"}
+  }],
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://avi48437.github.io/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-01/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Avi | Personal Website",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://avi48437.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+<body id="top">
+    <header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://avi48437.github.io/" accesskey="h" title="Avinandan Roy (Alt + H)">
+                <img src="https://avi48437.github.io/images/profile.jpg" alt="" aria-label="logo"
+                    height="30">Avinandan Roy</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://avi48437.github.io/bio/" title="Bio">
+                    <span>Bio</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://avi48437.github.io/notes/" title="Notes">
+                    <span>Notes</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://avi48437.github.io/blogs/" title="Blogs">
+                    <span>Blogs</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://avi48437.github.io/links/" title="Links">
+                    <span>Links</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://avi48437.github.io/travel/" title="Travel">
+                    <span>Travel</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://avi48437.github.io/contact/" title="Contact">
+                    <span>Contact</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://avi48437.github.io/papers/" title="Paper Summary">
+                    <span>Paper Summary</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+<div id="site-sidebar-overlay" class="site-sidebar-overlay"></div>
+
+<aside id="site-sidebar" class="site-sidebar">
+  <div class="site-sidebar-inner">
+    <div class="site-sidebar-header">
+      <span class="site-sidebar-title">Contents</span>
+      <button
+        id="sidebar-close"
+        class="site-sidebar-toggle"
+        type="button"
+        aria-label="Collapse sidebar"
+      >
+        ✕
+      </button>
+    </div>
+
+    <nav class="site-sidebar-nav">
+      <ul class="filetree-list">
+  
+  
+    
+    
+    
+
+    <li class="filetree-item">
+      
+        <details class="filetree-folder" open>
+          <summary class="filetree-summary">
+            <a href="/notes/" class="filetree-link " onclick="event.stopPropagation();">
+              Notes
+            </a>
+          </summary>
+
+          <div class="filetree-children">
+            
+              <ul class="filetree-list">
+  
+  
+    
+    
+    
+
+    <li class="filetree-item">
+      
+        <details class="filetree-folder" >
+          <summary class="filetree-summary">
+            <a href="/notes/short-notes/" class="filetree-link " onclick="event.stopPropagation();">
+              Short Notes
+            </a>
+          </summary>
+
+          <div class="filetree-children">
+            
+
+            
+              <ul class="filetree-list">
+                
+                  <li class="filetree-item">
+                    <a href="/notes/short-notes/girsanov-theorem/" class="filetree-link ">
+                      Girsanov Theorem
+                    </a>
+                  </li>
+                
+              </ul>
+            
+          </div>
+        </details>
+      
+    </li>
+  
+    
+    
+    
+
+    <li class="filetree-item">
+      
+        <details class="filetree-folder" open>
+          <summary class="filetree-summary">
+            <a href="/notes/washu-spring-semester/" class="filetree-link " onclick="event.stopPropagation();">
+              WASHU: Spring Semester
+            </a>
+          </summary>
+
+          <div class="filetree-children">
+            
+              <ul class="filetree-list">
+  
+  
+    
+    
+    
+
+    <li class="filetree-item">
+      
+        <details class="filetree-folder" open>
+          <summary class="filetree-summary">
+            <a href="/notes/washu-spring-semester/advanced-statistical-computing-ii/" class="filetree-link " onclick="event.stopPropagation();">
+              Advanced Statistical Computing II
+            </a>
+          </summary>
+
+          <div class="filetree-children">
+            
+
+            
+              <ul class="filetree-list">
+                
+                  <li class="filetree-item">
+                    <a href="/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-01/" class="filetree-link active">
+                      Lecture 1: Optimization Basics and Existence of Solutions
+                    </a>
+                  </li>
+                
+                  <li class="filetree-item">
+                    <a href="/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-02/" class="filetree-link ">
+                      Lecture 2: Convexity, Geometry, and Differentiability in Optimization
+                    </a>
+                  </li>
+                
+                  <li class="filetree-item">
+                    <a href="/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-03/" class="filetree-link ">
+                      Lecture 3: Gradient Geometry and Iterative Optimization
+                    </a>
+                  </li>
+                
+              </ul>
+            
+          </div>
+        </details>
+      
+    </li>
+  
+    
+    
+    
+
+    <li class="filetree-item">
+      
+        <details class="filetree-folder" >
+          <summary class="filetree-summary">
+            <a href="/notes/washu-spring-semester/theory-of-statistics-ii/" class="filetree-link " onclick="event.stopPropagation();">
+              Theory of Statistics II
+            </a>
+          </summary>
+
+          <div class="filetree-children">
+            
+
+            
+              <ul class="filetree-list">
+                
+                  <li class="filetree-item">
+                    <a href="/notes/washu-spring-semester/theory-of-statistics-ii/lecture-01/" class="filetree-link ">
+                      Lecture 1: Modes of Convergence
+                    </a>
+                  </li>
+                
+              </ul>
+            
+          </div>
+        </details>
+      
+    </li>
+  
+</ul>
+            
+
+            
+          </div>
+        </details>
+      
+    </li>
+  
+</ul>
+            
+
+            
+          </div>
+        </details>
+      
+    </li>
+  
+    
+    
+    
+
+    <li class="filetree-item">
+      
+        <details class="filetree-folder" >
+          <summary class="filetree-summary">
+            <a href="/papers/" class="filetree-link " onclick="event.stopPropagation();">
+              Paper Summaries
+            </a>
+          </summary>
+
+          <div class="filetree-children">
+            
+
+            
+              <ul class="filetree-list">
+                
+                  <li class="filetree-item">
+                    <a href="/papers/nonparametric-regression-model-with-tree-structured-response/" class="filetree-link ">
+                      Nonparametric Regression Model with Tree-structured Response
+                    </a>
+                  </li>
+                
+              </ul>
+            
+          </div>
+        </details>
+      
+    </li>
+  
+    
+    
+    
+
+    <li class="filetree-item">
+      
+        <a href="/contact/" class="filetree-link ">
+          Contact
+        </a>
+      
+    </li>
+  
+    
+    
+    
+
+    <li class="filetree-item">
+      
+        <a href="/blogs/" class="filetree-link ">
+          
+        </a>
+      
+    </li>
+  
+    
+    
+    
+
+    <li class="filetree-item">
+      
+        <a href="/links/" class="filetree-link ">
+          
+        </a>
+      
+    </li>
+  
+    
+    
+    
+
+    <li class="filetree-item">
+      
+        <a href="/travel/" class="filetree-link ">
+          
+        </a>
+      
+    </li>
+  
+    
+    
+    
+
+    <li class="filetree-item">
+      
+        <a href="/bio/" class="filetree-link ">
+          Bio
+        </a>
+      
+    </li>
+  
+</ul>
+    </nav>
+  </div>
+</aside>
+
+<button
+  id="sidebar-open"
+  class="site-sidebar-open"
+  type="button"
+  aria-label="Open sidebar"
+>
+  ☰
+</button>
+
+<script>
+(function () {
+  function initSidebar() {
+    const body = document.body;
+    const openBtn = document.getElementById("sidebar-open");
+    const closeBtn = document.getElementById("sidebar-close");
+    const overlay = document.getElementById("site-sidebar-overlay");
+
+    if (!body || !openBtn || !closeBtn || !overlay) return;
+
+    const STORAGE_KEY = "site-sidebar-open";
+
+    function openSidebar() {
+      body.classList.add("sidebar-open");
+      localStorage.setItem(STORAGE_KEY, "true");
+    }
+
+    function closeSidebar() {
+      body.classList.remove("sidebar-open");
+      localStorage.setItem(STORAGE_KEY, "false");
+    }
+
+    function toggleSidebar() {
+      if (body.classList.contains("sidebar-open")) {
+        closeSidebar();
+      } else {
+        openSidebar();
+      }
+    }
+
+    const saved = localStorage.getItem(STORAGE_KEY);
+
+    if (saved === "true") {
+      body.classList.add("sidebar-open");
+    } else {
+      body.classList.remove("sidebar-open");
+    }
+
+    openBtn.addEventListener("click", openSidebar);
+    closeBtn.addEventListener("click", closeSidebar);
+    overlay.addEventListener("click", closeSidebar);
+
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") {
+        closeSidebar();
+      }
+    });
+
+    window.toggleSiteSidebar = toggleSidebar;
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initSidebar);
+  } else {
+    initSidebar();
+  }
+})();
+</script>
+
+<main class="page-main-content">
+  <article class="post-single">
+    <header class="post-header">
+      <h1 class="post-title">Lecture 1: Optimization Basics and Existence of Solutions</h1>
+      
+        <div class="post-description">Defines optimization problems and key concepts (global/local minima, stationary points), and gives conditions—via lower semicontinuity, compactness, or coercivity—under which minimizers exist, with implications for statistical estimation and algorithms.</div>
+      
+    </header>
+
+    <div class="post-content">
+      <h2 id="what-is-an-optimization-problem">What is an Optimization Problem?</h2>
+
+
+
+<p>Let us first formally define what we mean by an optimization problem first. 
+
+
+
+
+
+
+
+
+
+
+
+<div class="thm-block definition" id="definition-1-1">
+  <div class="thm-title">
+    Definition 1.1: Optimization Problem
+  </div>
+  <div class="thm-body"><p>An optimization problem consists of</p>
+<ul>
+<li>a decision variable $\theta \in \R^p$,</li>
+<li>a feasible set $\Theta \subset \R^p$,</li>
+<li>an objective function $f:\R^p\rightarrow \R\cup\lbrace \pm \infty \rbrace$ and</li>
+<li>finding $\argmin\limits_{\theta \in \Theta} f(\theta)$</li>
+</ul>
+<p>This $f(\theta)$ is called the objective value and $\theta$ is a candidate solution.</p>
+</div>
+</div>
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="example-block" id="example-1-1">
+  <div class="example-title">
+    Example 1.1: OLS
+  </div>
+  <div class="example-body">An example of such optimization problem is - <em>Ordinary Least Square Solution of Linear Regression</em>. Note that we have the model $Y=X\beta +\epsilon$. Here the decision variable is $\beta$, the feasible set is $\R^p$ and the objective function is the $L_2$ loss between $Y$ and $X\beta$, which is $||Y-X\beta||^2_2$</div>
+</div>
+
+<p>Now, we shall discuss what about constrained vs. unconstrained Optimization. For that let us first define what we call an indicator function 
+
+
+
+
+
+
+
+
+
+
+
+<div class="thm-block definition" id="definition-1-2">
+  <div class="thm-title">
+    Definition 1.2: Indicator Function
+  </div>
+  <div class="thm-body">The indicator function $i_{\Theta}:\Theta\rightarrow \lbrace 0,\infty\rbrace$ such that $$
+i_{\Theta}(\theta)=\begin{cases}
+0,\quad\theta \in \Theta \\
+\infty,\quad \theta \notin \Theta
+\end{cases}
+$$ Suppose then the constrained space is $\Theta^{*}\subset \Theta$. We can then write that $$
+\min_{\theta \in \Theta}f(\theta)\Leftrightarrow \min_{\theta \in \Theta^{*}}f(\theta)+i_{\Theta}(\theta)
+$$</div>
+</div>
+</p>
+<h3 id="global-local-stationary-points">Global, Local, Stationary points</h3>
+<p>Now, it may be possible that in a minimization problem more than one mode exits for the objective function. In that case we define the <em>Global Minimizer, Local Minimizer</em> and to find out the existence of the optimizers, we find where the slope of the objective function becomes zero and hence we define the <em>Stationary Point</em></p>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<div class="thm-block definition" id="definition-1-3">
+  <div class="thm-title">
+    Definition 1.3: Global Minimizer, Local Minimizer, Stationary Point
+  </div>
+  <div class="thm-body"><ul>
+<li>a point $\theta^{*}$ is called the <strong>Global Minimizer</strong> if, $$
+\boxed{f(\theta^{*})\le f(\theta),\quad \forall \theta\in \Theta}
+$$</li>
+<li>a point $\theta^{*}$ is called the <strong>Local Minimizer</strong> if, $$
+\boxed{\exists \enspace r&gt;0\text{ such that  } f(\theta^{*})\le f(\theta)\enspace \forall \theta\in B(\theta^{*},r)\cap \Theta}
+$$ where $B(\theta,r)=\rbrace \phi: ||\theta-\phi||\le r\rbrace$,</li>
+<li>a point $\theta^{*}$ is called a <strong>Stationary Point</strong> if $f$ is differentiable at $\theta^{*}$ and satisfies $$
+\boxed{\nabla f(\theta^{*})=0}
+$$</li>
+</ul>
+</div>
+</div>
+ We can similarly define the <em>Global Maximizer</em> and <em>Local Maximizer</em>.</p>
+<h3 id="existence-why-solutions-exists-or-not">Existence: Why Solutions exists or not?</h3>
+<p>Semicontinuous functions are at the heart of this topic. So, we will first define what is semicontinuity. We will define both lower semicontinuous function and upper semicontinuous function here. 
+
+
+
+
+
+
+
+
+
+
+
+<div class="thm-block definition" id="definition-1-4">
+  <div class="thm-title">
+    Definition 1.4: Lower Semicontinuous (LSC) and Upper Semicontinuous (USC) functions
+  </div>
+  <div class="thm-body">Let, $(\Theta,d)$ be a metric space abd $f:\Theta\rightarrow \R$. The function $f$ is <strong>lower semicontinuous</strong> at $\theta \in \Theta$ if for every sequence $\lbrace\theta_n\rbrace$ such that $\theta_n\rightarrow \theta$, we have $$
+f(\theta)\le \liminf_{n\rightarrow \infty}f(\theta_n)
+$$ and $f$ is <strong>upper semicontinuous</strong> at $\theta \in \Theta$ if for every sequence $\lbrace\theta_n\rbrace$ such that $\theta_n\rightarrow \theta$, we have $$
+f(\theta)\ge \limsup_{n\rightarrow \infty}f(\theta_n)
+$$</div>
+</div>
+ Here are couple of more definitions below 
+
+
+
+
+
+
+
+
+
+
+
+<div class="thm-block definition" id="definition-1-5">
+  <div class="thm-title">
+    Definition 1.5: Coercive function
+  </div>
+  <div class="thm-body">A function $f:\Theta\rightarrow \R$ is <strong>coercive</strong> if $||\theta||\rightarrow \infty\enspace \implies f(\theta)\rightarrow \infty$</div>
+</div>
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="thm-block definition" id="definition-1-6">
+  <div class="thm-title">
+    Definition 1.6: Closed Set
+  </div>
+  <div class="thm-body">Let, $(\Theta,d)$ be a metric space. $\Theta$ is said to be a closed set if for every sequence $\lbrace \theta_n \rbrace \subset \Theta$, such that $\theta_n\rightarrow \theta$, we have $\theta\in \Theta$.</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="thm-block definition" id="definition-1-7">
+  <div class="thm-title">
+    Definition 1.7: Compact Set (Heine-Borel)
+  </div>
+  <div class="thm-body">$\Theta$ is compact if is closed and bounded. (<em>Note that this characterization works only when the underlying space is finite-dimensional.</em>). The <strong>sequential definition</strong> of compactness is as follows: $\Theta$ is compact iff every sequence in $\Theta$ has a further subsequence with converges to limit point inside $\Theta$.</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="thm-block theorem" id="theorem-1-1">
+  <div class="thm-title">
+    Theorem 1.1: Existence of minimizers on closed sets
+  </div>
+  <div class="thm-body">Let $\Theta$ be nonempty and closed. Assume $f:\Theta\rightarrow \R$ is lower semicontinuous on $\Theta$ and either $\Theta$ is compact or $f$ is coercive on $\Theta$, then the problem $\min\limits_{\theta\in \Theta}f(\theta)$ attains a minimizer.</div>
+</div>
+
+<p>
+
+
+<details class="proof-block" open>
+  <summary class="proof-title">Proof.</summary>
+
+  <div class="proof-body">
+    <p><strong>case 2</strong></p>
+<p>Given that $\Theta$ is closed and $f$ is coercive. Let, us first define the level sets. $$
+L_c=\lbrace \theta\in\Theta : f(\theta)\le c\rbrace
+$$ Note that $L_c$ is bounded for all c. If not bounded then then due to coerciveness when $||\theta||\rightarrow \infty$ inside $L_c$, $f(\theta)\rightarrow \infty$. But this contradicts the condition inside $L_c$, that $f(\theta)\le c$. Therefore, $L_c$ is a bounded set. Let $\lbrace \theta_n\rbrace$ a sequence such that $\theta_n\rightarrow \theta$. As $f$ is lower semicontinuous, $\liminf\limits_{n\rightarrow \infty}f(\theta_n)\ge f(\theta)$. Therefore $f(\theta)\le c$ and as $\Theta$ is closed, $\theta \in L_c$. So, $L_c$ is closed and bounded and hence $L_c$ is compact.</p>
+<p>Let, $m=\inf f(\theta)$. Consider a sequence $\lbrace \theta_k\rbrace\subset \Theta$ such that $f(\theta_k)\downarrow m$. Now there will exist $K$ such that for all $k\ge K$, $f(\theta_k)\le m+1$. Hence $\lbrace \theta_l\rbrace_{l\ge K}\subset L_{m+1}$. As $L_{m+1}$ is compact this sequence $\lbrace \theta_l\rbrace_{l\ge K}$ will have a further subsequence, $\lbrace \theta^{'}_k\rbrace$ that will converge to a limit point $\theta^{*}$.</p>
+<p>Hence, by lower semicontinuity of $f$, we shall get the following $$
+f(\theta^{*})\le \liminf_{k\rightarrow \infty}f(\theta&rsquo;_k)=m
+$$</p>
+
+  </div>
+
+  <div class="proof-end">□</div>
+</details>
+ 
+
+
+
+
+
+
+
+
+
+
+
+<div class="example-block" id="example-1-2">
+  <div class="example-title">
+    Example 1.2
+  </div>
+  <div class="example-body">Let, $\Theta = (0,1)$ and $f(\theta)=\theta$. Note that the minimizer does not exist in $\Theta$.</div>
+</div>
+</p>
+<p>Many estimators are defined as solutions to optimize problems like $\min\limits_{\theta \in \Theta}f(\theta)$. Existence theorems are nice but they don&rsquo;t tell us anything about how to solve the problem.</p>
+<p>In statistical computation, estimation problems are typically formulated as the minimization of an objective function (e.g., a negative log-likelihood or penalized loss) over a parameter space. Numerical algorithms implicitly assume that this optimization problem is well posed, meaning that a minimizer exists and can be approximated by iterative procedures. The following theorem provides conditions under which this assumption is mathematically justified.</p>
+<ul>
+<li><strong>Existence of estimators:</strong> Ensures that statistical objectives attain a minimizer, rather than merely an unattained infimum.</li>
+<li><strong>Stability of numerical algorithms:</strong> Compactness or coercivity prevents minimizing sequences from diverging to infinity, avoiding numerical blow-up.</li>
+<li><strong>Role of regularization and priors:</strong> Penalties and Bayesian priors enforce coercivity, resolving non-existence pathologies in MLEs (e.g., separation or variance collapse).</li>
+<li><strong>Feasibility of algorithmic limits:</strong> Closedness of the parameter space guarantees that limits of convergent iterates remain admissible.</li>
+<li><strong>Meaningful convergence diagnostics:</strong> Lower semicontinuity ensures that convergence of objective values corresponds to convergence toward a valid minimizer.</li>
+<li><strong>Foundation for algorithmic guarantees:</strong> Provides the mathematical conditions implicitly required by EM, SAEM, gradient descent, and second-order optimization methods.</li>
+</ul>
+
+    </div>
+  </article>
+</main>
+
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2026 <a href="https://avi48437.github.io/">Avi | Personal Website</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu');
+    if (menu) {
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            html.dataset.theme = 'dark';
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

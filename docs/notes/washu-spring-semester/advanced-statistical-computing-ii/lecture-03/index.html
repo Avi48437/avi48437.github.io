@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto" data-theme="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Lecture 3: Gradient Geometry and Iterative Optimization | Avi | Personal Website</title>
+<meta name="keywords" content="">
+<meta name="description" content="Explains the geometric role of gradients as directions of steepest ascent/descent, their relation to level sets, and motivates iterative optimization via local linear approximations and descent methods.">
+<meta name="author" content="">
+<link rel="canonical" href="https://avi48437.github.io/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-03/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.343cc480b9ffc8f04ccbe5e968ad674880cab773ec19905e93033065c1e7a804.css" integrity="sha256-NDzEgLn/yPBMy&#43;XpaK1nSIDKt3PsGZBekwMwZcHnqAQ=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://avi48437.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://avi48437.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://avi48437.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://avi48437.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://avi48437.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="https://avi48437.github.io/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-03/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+                color-scheme: dark;
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .toc {
+                background: var(--entry);
+            }
+        }
+
+        @media (prefers-color-scheme: light) {
+            .list::-webkit-scrollbar-thumb {
+                border-color: var(--code-bg);
+            }
+        }
+
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else if (localStorage.getItem("pref-theme") === "light") {
+       document.querySelector("html").dataset.theme = 'light';
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script><link rel="stylesheet" href="/css/custom.min.ff270f8df3ba879fe9ef07b3c5b55007ad732c159f9c276596d2edd63d8da1e0.css"><script defer src="/js/nav-overflow.min.86e3c6af6c08bfe941e6868d1b70b3609d659d92391e95aeec96e30a5006877d.js"></script>
+
+
+  <link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
+/>
+
+<script
+  defer
+  src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js">
+</script>
+
+<script
+  defer
+  src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js">
+</script>
+
+<script>
+(function () {
+  const KATEX_MACROS = {
+    "\\R": "\\mathbb{R}",
+    "\\Eb": "\\mathbb{E}",
+    "\\Pb": "\\mathbb{P}",
+    "\\Var": "\\operatorname{Var}",
+    "\\Cov": "\\operatorname{Cov}",
+    "\\argmin": "\\operatorname*{arg\\,min}",
+    "\\argmax": "\\operatorname*{arg\\,max}",
+    "\\SubG": "\\text{Sub-Gaussian}",
+    "\\SubE": "\\text{Sub-Exponential}",
+    "\\Perp": "\\perp\\!\\!\\!\\perp",
+    "\\ceil": "\\left\\lceil #1 \\right\\rceil",
+    "\\floor": "\\left\\lfloor #1 \\right\\rfloor"
+  };
+
+  const PAGE_MACROS = {"\\asconv":"\\xrightarrow{\\text{a.s.}}","\\dconv":"\\xrightarrow{d}","\\ind":"\\operatorname{IND}","\\lrconv":"\\xrightarrow{L_r}","\\pconv":"\\xrightarrow{P}"};
+  Object.assign(KATEX_MACROS, PAGE_MACROS);
+
+  function stripMathDelims(s) {
+    return s
+      .replace(/^\\\(/, "")
+      .replace(/\\\)$/, "")
+      .replace(/^\\\[/, "")
+      .replace(/\\\]$/, "");
+  }
+
+  function renderPandocMathSpans() {
+    const inlineSpans = document.querySelectorAll("span.math.inline");
+    inlineSpans.forEach(el => {
+      if (el.querySelector(".katex")) return; 
+      const tex = stripMathDelims(el.textContent.trim());
+      try {
+        katex.render(tex, el, {
+          displayMode: false,
+          throwOnError: false,
+          macros: KATEX_MACROS
+        });
+      } catch (_) {}
+    });
+
+    const displaySpans = document.querySelectorAll("span.math.display");
+    displaySpans.forEach(el => {
+      if (el.querySelector(".katex")) return; 
+      const tex = stripMathDelims(el.textContent.trim());
+      try {
+        katex.render(tex, el, {
+          displayMode: true,
+          throwOnError: false,
+          macros: KATEX_MACROS
+        });
+      } catch (_) {}
+    });
+  }
+
+  function renderDelimiterMath() {
+    if (typeof renderMathInElement !== "function") return;
+    renderMathInElement(document.body, {
+      delimiters: [
+        { left: "$$", right: "$$", display: true },
+        { left: "$",  right: "$",  display: false },
+        { left: "\\(", right: "\\)", display: false },
+        { left: "\\[", right: "\\]", display: true }
+      ],
+      throwOnError: false,
+      macros: KATEX_MACROS,
+      
+      ignoredTags: ["script","noscript","style","textarea","pre","code","option"],
+      ignoredClasses: ["katex", "math"]
+    });
+  }
+
+  
+  function boot() {
+    if (!window.katex || typeof window.renderMathInElement !== "function") {
+      setTimeout(boot, 30);
+      return;
+    }
+    
+    renderDelimiterMath();
+    renderPandocMathSpans();
+  }
+
+  document.addEventListener("DOMContentLoaded", boot);
+})();
+</script>
+
+
+<meta property="og:url" content="https://avi48437.github.io/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-03/">
+  <meta property="og:site_name" content="Avi | Personal Website">
+  <meta property="og:title" content="Lecture 3: Gradient Geometry and Iterative Optimization">
+  <meta property="og:description" content="Explains the geometric role of gradients as directions of steepest ascent/descent, their relation to level sets, and motivates iterative optimization via local linear approximations and descent methods.">
+  <meta property="og:locale" content="en-us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="notes">
+    <meta property="article:published_time" content="2026-01-10T00:00:00+00:00">
+    <meta property="article:modified_time" content="2026-01-10T00:00:00+00:00">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Lecture 3: Gradient Geometry and Iterative Optimization">
+<meta name="twitter:description" content="Explains the geometric role of gradients as directions of steepest ascent/descent, their relation to level sets, and motivates iterative optimization via local linear approximations and descent methods.">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Notes",
+      "item": "https://avi48437.github.io/notes/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  4 ,
+      "name": "Lecture 3: Gradient Geometry and Iterative Optimization",
+      "item": "https://avi48437.github.io/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-03/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Lecture 3: Gradient Geometry and Iterative Optimization",
+  "name": "Lecture 3: Gradient Geometry and Iterative Optimization",
+  "description": "Explains the geometric role of gradients as directions of steepest ascent/descent, their relation to level sets, and motivates iterative optimization via local linear approximations and descent methods.",
+  "keywords": [
+    
+  ],
+  "articleBody": "Gradient geometry: steepest ascent and descent Once a gradient exists, we can ask a more refined geometric question:\nAmong all directions of a fixed length, which direction increases the function the fastest?\nTheorem 1.1: Cauchy-Schwartz inequality For any vectors $x,y\\in \\R^p$, we have $$ |x^Ty|\\le ||x||_2||y||_2 $$ Moreover equality holds if and only if $x$ and $y$ are linearly dependent which is to say that $x=\\lambda y$ for some scalar $\\lambda\\in \\R$. To isolate direction rather than scale, we restrict attention to unit vectors. Theorem 1.2: Gradient vectors as steepest ascent Let, $f$ be differentiable at $\\theta$. Among all directions $v$, with $||v||_2=1$, $$ \\max\\limits_{||v||_2=1}\\nabla f(\\theta)^Tv=||\\nabla f(\\theta)||_2 $$ and the maximizer is $u=\\frac{\\nabla f(\\theta)}{||f(\\theta)||_2}$ when $\\nabla f(\\theta)\\neq 0$ Proof. By Cauchy Schwartz inequality we will have $$ \\nabla f(\\theta)^Tv\\le ||\\nabla f(\\theta)||_2\\underbrace{||v||_2}_{=1}=||\\nabla f(\\theta)||_2 $$ □ This above theorem essentially tells us that the gradient points in the direction of the maximal instantaneous increase of the function and the magnitude $||\\nabla f(\\theta)||_2$ is the maximal rate of increase per unit step.\nSteepest descent direction While finding the minimizer of an objective function, we want steepest decrease and that’s why the direction of the steepest decrease is the negative gradient $-\\nabla f(\\theta)$. his is the fundamental geometric justification for gradient descent updates of the form $$ \\theta^{(k+1)}=\\theta^{(k)}-\\eta_k\\nabla f(\\theta^{(k)}) $$\nConnection to level sets Level sets provide a geometric interpretation of gradients and directional derivatives. Let $ f : \\mathbb{R}^p \\rightarrow \\mathbb{R} $ be a differentiable function.\nThe level set of $ f $ at height $ c $ is defined as $$ \\mathcal{L}_c = \\{ \\theta \\in \\mathbb{R}^p : f(\\theta) = c \\}. $$\nIntuitively, a level set consists of all points in parameter space where the function takes the same value. Moving along a level set does not change the value of the function.\nLet $\\theta(t)$ be a smooth curve that lies entirely on a level set $\\mathcal{L}_c$. Then $$ f(\\theta(t)) \\equiv c \\quad \\text{for all } t. $$ Differentiating both sides with respect to $ t $ and applying the multivariable chain rule gives $$ \\frac{d}{dt} f(\\theta(t)) = \\nabla f(\\theta(t))^\\top \\theta’(t) = 0. $$\nThis equation holds for any smooth curve tangent to the level set. Therefore, the gradient $\\nabla f(\\theta)$ is orthogonal to every tangent direction $\\theta’(t)$ along the level set. In other words, the gradient is normal (perpendicular) to the level set at $\\theta$. This geometric fact describes that moving along the level set produces no change in the function value, so the direction of maximum increase must be perpendicular to it.\nLocal Linear Models and Descent In nearly all statistical objectives, the minimizer cannot be written in closed form. Even when $f$ is convex, the equation defining an optimum (e.g. $\\nabla f(\\theta)=0$) may not admit an analytic solution, and solving it exactly can be as hard as the original problem. This motivates iterative algorithms: procedures that generate a sequence $\\{\\theta^{(k)}\\}_{k\\ge 0}$ intended to converge to a solution.\nDefinition 1.1: Iterative optimization algorithm An iterative optimization algorithm is a rule that generates a sequence $\\{\\theta^{(k)}\\}_{k\\ge 0}$ according to $$ \\theta^{(k+1)}=\\mathcal{A}(\\theta^{(k)}; \\text{ information about } f\\text{ near }\\theta^{(k)}), $$ where $\\mathcal{A}$ is the update map. Why are iterative optimization algorithms local ? In practice we don’t know how $f$ behaves across the global landscape $\\Theta$. Start with $\\theta^{(k)}$, we can often calculate $f(\\theta^{(k)})$. $\\nabla f(\\theta^{(k)})$: we often can compute or approx. Linearization as a principled local surrogate First, recall the implication of a function being Fréchet differentiable.\nLet $f : \\mathbb{R}^p \\to \\mathbb{R}$ be Fréchet differentiable at $\\theta$. By definition, there exists a gradient $\\nabla f(\\theta)$ and a remainder term $r_\\theta(h)$ such that\n$$ f(\\theta + h) = f(\\theta) + \\nabla f(\\theta)^\\top h + r_\\theta(h), \\text{ with } \\frac{r_\\theta(h)}{||h||_2} \\to 0 \\quad \\text{as } h \\to 0. $$\nEquivalently, for every $\\epsilon \u003e 0$ there exists $\\delta \u003e 0$ such that\n$$ |f(\\theta+h)-f(\\theta)-\\nabla f(\\theta)^T h| \\le \\epsilon ||h||_2\\text{ whenever } ||h||_2 \\le \\delta. $$\nDefinition 1.2: Local Linear Model The local linear model of $f$ at $\\theta$ is $$ m_{\\theta}(h):=f(\\theta)+\\nabla f(\\theta)^Th $$ The above inequality hows that on a sufficiently small neighborhood, the true objective differs from its linear model by at most $O(||h||_2)$. Thus, minimizing $m_{\\theta}(h)$ over small steps is a principled approximation to minimizing the true objective locally.\nSteepest descent as a geometric optimization problem For Frechet differentiable function, $f$, we have $$ \\min_{||u||_2=1}D_uf(\\theta)=\\min_{||u||_2=1}\\nabla f(\\theta)^Tu. $$ Theorem 1.3: Steepest descent direction If $\\nabla f(\\theta)\\neq 0$, then $$ \\min_{||u||_2=1}\\nabla f(\\theta)^Tu=-||\\nabla f(\\theta)||_2 $$ ’ Proof of the above theorem follows directly from Cauchy-Schwartz inequality.\nWhy the steepest descent direction guarantees decrease ? Directional derivatives describe infinitesimal behavior. We now show that sufficiently small steps in the steepest descent direction produce an actual decrease in the objective.\nProposition 1.1: Local Decrease along steepest descent Suppose $f$ is Frechet differentiable at $\\theta$ and $\\nabla f(\\theta)\\neq 0$. Let $$ u^{*}=-\\frac{\\nabla f(\\theta)}{||\\nabla f(\\theta)||_2} $$ Then there exists $t_0$ such that for all $t\\in (0,t_0)$, $$ f(\\theta+tu^{*})",
+  "wordCount" : "866",
+  "inLanguage": "en",
+  "datePublished": "2026-01-10T00:00:00Z",
+  "dateModified": "2026-01-10T00:00:00Z",
+  "author":[{
+    "@type": "Person",
+    "name": {"name":"Avinandan Roy"}
+  }],
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://avi48437.github.io/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-03/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Avi | Personal Website",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://avi48437.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+<body id="top">
+    <header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://avi48437.github.io/" accesskey="h" title="Avinandan Roy (Alt + H)">
+                <img src="https://avi48437.github.io/images/profile.jpg" alt="" aria-label="logo"
+                    height="30">Avinandan Roy</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://avi48437.github.io/bio/" title="Bio">
+                    <span>Bio</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://avi48437.github.io/notes/" title="Notes">
+                    <span>Notes</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://avi48437.github.io/blogs/" title="Blogs">
+                    <span>Blogs</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://avi48437.github.io/links/" title="Links">
+                    <span>Links</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://avi48437.github.io/travel/" title="Travel">
+                    <span>Travel</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://avi48437.github.io/contact/" title="Contact">
+                    <span>Contact</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://avi48437.github.io/papers/" title="Paper Summary">
+                    <span>Paper Summary</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+<div id="site-sidebar-overlay" class="site-sidebar-overlay"></div>
+
+<aside id="site-sidebar" class="site-sidebar">
+  <div class="site-sidebar-inner">
+    <div class="site-sidebar-header">
+      <span class="site-sidebar-title">Contents</span>
+      <button
+        id="sidebar-close"
+        class="site-sidebar-toggle"
+        type="button"
+        aria-label="Collapse sidebar"
+      >
+        ✕
+      </button>
+    </div>
+
+    <nav class="site-sidebar-nav">
+      <ul class="filetree-list">
+  
+  
+    
+    
+    
+
+    <li class="filetree-item">
+      
+        <details class="filetree-folder" open>
+          <summary class="filetree-summary">
+            <a href="/notes/" class="filetree-link " onclick="event.stopPropagation();">
+              Notes
+            </a>
+          </summary>
+
+          <div class="filetree-children">
+            
+              <ul class="filetree-list">
+  
+  
+    
+    
+    
+
+    <li class="filetree-item">
+      
+        <details class="filetree-folder" >
+          <summary class="filetree-summary">
+            <a href="/notes/short-notes/" class="filetree-link " onclick="event.stopPropagation();">
+              Short Notes
+            </a>
+          </summary>
+
+          <div class="filetree-children">
+            
+
+            
+              <ul class="filetree-list">
+                
+                  <li class="filetree-item">
+                    <a href="/notes/short-notes/girsanov-theorem/" class="filetree-link ">
+                      Girsanov Theorem
+                    </a>
+                  </li>
+                
+              </ul>
+            
+          </div>
+        </details>
+      
+    </li>
+  
+    
+    
+    
+
+    <li class="filetree-item">
+      
+        <details class="filetree-folder" open>
+          <summary class="filetree-summary">
+            <a href="/notes/washu-spring-semester/" class="filetree-link " onclick="event.stopPropagation();">
+              WASHU: Spring Semester
+            </a>
+          </summary>
+
+          <div class="filetree-children">
+            
+              <ul class="filetree-list">
+  
+  
+    
+    
+    
+
+    <li class="filetree-item">
+      
+        <details class="filetree-folder" open>
+          <summary class="filetree-summary">
+            <a href="/notes/washu-spring-semester/advanced-statistical-computing-ii/" class="filetree-link " onclick="event.stopPropagation();">
+              Advanced Statistical Computing II
+            </a>
+          </summary>
+
+          <div class="filetree-children">
+            
+
+            
+              <ul class="filetree-list">
+                
+                  <li class="filetree-item">
+                    <a href="/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-01/" class="filetree-link ">
+                      Lecture 1: Optimization Basics and Existence of Solutions
+                    </a>
+                  </li>
+                
+                  <li class="filetree-item">
+                    <a href="/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-02/" class="filetree-link ">
+                      Lecture 2: Convexity, Geometry, and Differentiability in Optimization
+                    </a>
+                  </li>
+                
+                  <li class="filetree-item">
+                    <a href="/notes/washu-spring-semester/advanced-statistical-computing-ii/lecture-03/" class="filetree-link active">
+                      Lecture 3: Gradient Geometry and Iterative Optimization
+                    </a>
+                  </li>
+                
+              </ul>
+            
+          </div>
+        </details>
+      
+    </li>
+  
+    
+    
+    
+
+    <li class="filetree-item">
+      
+        <details class="filetree-folder" >
+          <summary class="filetree-summary">
+            <a href="/notes/washu-spring-semester/theory-of-statistics-ii/" class="filetree-link " onclick="event.stopPropagation();">
+              Theory of Statistics II
+            </a>
+          </summary>
+
+          <div class="filetree-children">
+            
+
+            
+              <ul class="filetree-list">
+                
+                  <li class="filetree-item">
+                    <a href="/notes/washu-spring-semester/theory-of-statistics-ii/lecture-01/" class="filetree-link ">
+                      Lecture 1: Modes of Convergence
+                    </a>
+                  </li>
+                
+              </ul>
+            
+          </div>
+        </details>
+      
+    </li>
+  
+</ul>
+            
+
+            
+          </div>
+        </details>
+      
+    </li>
+  
+</ul>
+            
+
+            
+          </div>
+        </details>
+      
+    </li>
+  
+    
+    
+    
+
+    <li class="filetree-item">
+      
+        <details class="filetree-folder" >
+          <summary class="filetree-summary">
+            <a href="/papers/" class="filetree-link " onclick="event.stopPropagation();">
+              Paper Summaries
+            </a>
+          </summary>
+
+          <div class="filetree-children">
+            
+
+            
+              <ul class="filetree-list">
+                
+                  <li class="filetree-item">
+                    <a href="/papers/nonparametric-regression-model-with-tree-structured-response/" class="filetree-link ">
+                      Nonparametric Regression Model with Tree-structured Response
+                    </a>
+                  </li>
+                
+              </ul>
+            
+          </div>
+        </details>
+      
+    </li>
+  
+    
+    
+    
+
+    <li class="filetree-item">
+      
+        <a href="/contact/" class="filetree-link ">
+          Contact
+        </a>
+      
+    </li>
+  
+    
+    
+    
+
+    <li class="filetree-item">
+      
+        <a href="/blogs/" class="filetree-link ">
+          
+        </a>
+      
+    </li>
+  
+    
+    
+    
+
+    <li class="filetree-item">
+      
+        <a href="/links/" class="filetree-link ">
+          
+        </a>
+      
+    </li>
+  
+    
+    
+    
+
+    <li class="filetree-item">
+      
+        <a href="/travel/" class="filetree-link ">
+          
+        </a>
+      
+    </li>
+  
+    
+    
+    
+
+    <li class="filetree-item">
+      
+        <a href="/bio/" class="filetree-link ">
+          Bio
+        </a>
+      
+    </li>
+  
+</ul>
+    </nav>
+  </div>
+</aside>
+
+<button
+  id="sidebar-open"
+  class="site-sidebar-open"
+  type="button"
+  aria-label="Open sidebar"
+>
+  ☰
+</button>
+
+<script>
+(function () {
+  function initSidebar() {
+    const body = document.body;
+    const openBtn = document.getElementById("sidebar-open");
+    const closeBtn = document.getElementById("sidebar-close");
+    const overlay = document.getElementById("site-sidebar-overlay");
+
+    if (!body || !openBtn || !closeBtn || !overlay) return;
+
+    const STORAGE_KEY = "site-sidebar-open";
+
+    function openSidebar() {
+      body.classList.add("sidebar-open");
+      localStorage.setItem(STORAGE_KEY, "true");
+    }
+
+    function closeSidebar() {
+      body.classList.remove("sidebar-open");
+      localStorage.setItem(STORAGE_KEY, "false");
+    }
+
+    function toggleSidebar() {
+      if (body.classList.contains("sidebar-open")) {
+        closeSidebar();
+      } else {
+        openSidebar();
+      }
+    }
+
+    const saved = localStorage.getItem(STORAGE_KEY);
+
+    if (saved === "true") {
+      body.classList.add("sidebar-open");
+    } else {
+      body.classList.remove("sidebar-open");
+    }
+
+    openBtn.addEventListener("click", openSidebar);
+    closeBtn.addEventListener("click", closeSidebar);
+    overlay.addEventListener("click", closeSidebar);
+
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") {
+        closeSidebar();
+      }
+    });
+
+    window.toggleSiteSidebar = toggleSidebar;
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initSidebar);
+  } else {
+    initSidebar();
+  }
+})();
+</script>
+
+<main class="page-main-content">
+  <article class="post-single">
+    <header class="post-header">
+      <h1 class="post-title">Lecture 3: Gradient Geometry and Iterative Optimization</h1>
+      
+        <div class="post-description">Explains the geometric role of gradients as directions of steepest ascent/descent, their relation to level sets, and motivates iterative optimization via local linear approximations and descent methods.</div>
+      
+    </header>
+
+    <div class="post-content">
+      <h3 id="gradient-geometry-steepest-ascent-and-descent">Gradient geometry: steepest ascent and descent</h3>
+<p>Once a gradient exists, we can ask a more refined geometric question:</p>
+<p>Among all directions of a fixed length, which direction increases the function the fastest?</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<div class="thm-block theorem" id="theorem-1-1">
+  <div class="thm-title">
+    Theorem 1.1: Cauchy-Schwartz inequality
+  </div>
+  <div class="thm-body">For any vectors $x,y\in \R^p$, we have $$
+|x^Ty|\le ||x||_2||y||_2
+$$ Moreover equality holds if and only if $x$ and $y$ are linearly dependent which is to say that $x=\lambda y$ for some scalar $\lambda\in \R$.</div>
+</div>
+ To isolate direction rather than scale, we restrict attention to unit vectors. 
+
+
+
+
+
+
+
+
+
+
+
+<div class="thm-block theorem" id="theorem-1-2">
+  <div class="thm-title">
+    Theorem 1.2: Gradient vectors as steepest ascent
+  </div>
+  <div class="thm-body">Let, $f$ be differentiable at $\theta$. Among all directions $v$, with $||v||_2=1$, $$
+\max\limits_{||v||_2=1}\nabla f(\theta)^Tv=||\nabla f(\theta)||_2
+$$ and the maximizer is $u=\frac{\nabla f(\theta)}{||f(\theta)||_2}$ when $\nabla f(\theta)\neq 0$</div>
+</div>
+ 
+
+
+<details class="proof-block" open>
+  <summary class="proof-title">Proof.</summary>
+
+  <div class="proof-body">
+    By Cauchy Schwartz inequality we will have $$
+\nabla f(\theta)^Tv\le ||\nabla f(\theta)||_2\underbrace{||v||_2}_{=1}=||\nabla f(\theta)||_2
+$$
+  </div>
+
+  <div class="proof-end">□</div>
+</details>
+</p>
+<p>This above theorem essentially tells us that the gradient points in the direction of the maximal instantaneous increase of the function and the magnitude $||\nabla f(\theta)||_2$ is the maximal rate of increase per unit step.</p>
+<h4 id="steepest-descent-direction">Steepest descent direction</h4>
+<p>While finding the minimizer of an objective function, we want <strong>steepest decrease</strong> and that&rsquo;s why the direction of the steepest decrease is the negative gradient $-\nabla f(\theta)$. his is the fundamental geometric justification for gradient descent updates of the form $$
+\theta^{(k+1)}=\theta^{(k)}-\eta_k\nabla f(\theta^{(k)})
+$$</p>
+<h4 id="connection-to-level-sets">Connection to level sets</h4>
+<p>Level sets provide a geometric interpretation of gradients and directional derivatives. Let $ f : \mathbb{R}^p \rightarrow \mathbb{R} $ be a differentiable function.<br>
+The <strong>level set</strong> of $ f $ at height $ c $ is defined as $$
+\mathcal{L}_c = \{ \theta \in \mathbb{R}^p : f(\theta) = c \}.
+$$</p>
+<p>Intuitively, a level set consists of all points in parameter space where the function takes the same value. Moving along a level set does not change the value of the function.</p>
+<p>Let $\theta(t)$ be a smooth curve that lies entirely on a level set $\mathcal{L}_c$. Then $$
+f(\theta(t)) \equiv c \quad \text{for all } t.
+$$ Differentiating both sides with respect to $ t $ and applying the multivariable chain rule gives $$
+\frac{d}{dt} f(\theta(t))
+= \nabla f(\theta(t))^\top \theta&rsquo;(t)
+= 0.
+$$</p>
+<p>This equation holds for <strong>any</strong> smooth curve tangent to the level set. Therefore, the gradient $\nabla f(\theta)$ is orthogonal to every tangent direction $\theta&rsquo;(t)$ along the level set. In other words, the gradient is <strong>normal (perpendicular)</strong> to the level set at $\theta$. This geometric fact describes that moving along the level set produces no change in the function value, so the direction of maximum increase must be perpendicular to it.</p>
+<h3 id="local-linear-models-and-descent">Local Linear Models and Descent</h3>
+<p>In nearly all statistical objectives, the minimizer cannot be written in closed form. Even when $f$ is convex, the equation defining an optimum (e.g. $\nabla f(\theta)=0$) may not admit an analytic solution, and solving it exactly can be as hard as the original problem. This motivates <em>iterative</em> algorithms: procedures that generate a sequence $\{\theta^{(k)}\}_{k\ge 0}$ intended to converge to a solution.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="thm-block definition" id="definition-1-1">
+  <div class="thm-title">
+    Definition 1.1: Iterative optimization algorithm
+  </div>
+  <div class="thm-body">An <em>iterative optimization algorithm</em> is a rule that generates a sequence $\{\theta^{(k)}\}_{k\ge 0}$ according to $$
+\theta^{(k+1)}=\mathcal{A}(\theta^{(k)}; \text{ information about } f\text{ near }\theta^{(k)}),
+$$ where $\mathcal{A}$ is the update map.</div>
+</div>
+
+<h4 id="why-are-iterative-optimization-algorithms-local-">Why are iterative optimization algorithms local ?</h4>
+<ul>
+<li>In practice we don&rsquo;t know how $f$ behaves across the global landscape $\Theta$.</li>
+<li>Start with $\theta^{(k)}$, we can often calculate $f(\theta^{(k)})$.</li>
+<li>$\nabla f(\theta^{(k)})$: we often can compute or approx.</li>
+</ul>
+<h4 id="linearization-as-a-principled-local-surrogate">Linearization as a principled local surrogate</h4>
+<p>First, recall the implication of a function being <strong>Fréchet differentiable</strong>.<br>
+Let $f : \mathbb{R}^p \to \mathbb{R}$ be Fréchet differentiable at $\theta$. By definition, there exists a gradient $\nabla f(\theta)$ and a remainder term $r_\theta(h)$ such that</p>
+<p>$$
+f(\theta + h) = f(\theta) + \nabla f(\theta)^\top h + r_\theta(h),
+\text{ with }
+\frac{r_\theta(h)}{||h||_2} \to 0 \quad \text{as } h \to 0.
+$$</p>
+<p>Equivalently, for every $\epsilon &gt; 0$ there exists $\delta &gt; 0$ such that</p>
+<p>$$
+|f(\theta+h)-f(\theta)-\nabla f(\theta)^T h| \le \epsilon ||h||_2\text{ whenever } ||h||_2 \le \delta.
+$$</p>
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="thm-block definition" id="definition-1-2">
+  <div class="thm-title">
+    Definition 1.2: Local Linear Model
+  </div>
+  <div class="thm-body">The local linear model of $f$ at $\theta$ is $$
+m_{\theta}(h):=f(\theta)+\nabla f(\theta)^Th
+$$</div>
+</div>
+
+<p>The above inequality hows that on a sufficiently small neighborhood, the true objective differs from its linear model by at most $O(||h||_2)$. Thus, minimizing $m_{\theta}(h)$ over small steps is a principled approximation to minimizing the true objective locally.</p>
+<h4 id="steepest-descent-as-a-geometric-optimization-problem">Steepest descent as a geometric optimization problem</h4>
+<p>For Frechet differentiable function, $f$, we have $$
+\min_{||u||_2=1}D_uf(\theta)=\min_{||u||_2=1}\nabla f(\theta)^Tu.
+$$ 
+
+
+
+
+
+
+
+
+
+
+
+<div class="thm-block theorem" id="theorem-1-3">
+  <div class="thm-title">
+    Theorem 1.3: Steepest descent direction
+  </div>
+  <div class="thm-body">If $\nabla f(\theta)\neq 0$, then $$
+\min_{||u||_2=1}\nabla f(\theta)^Tu=-||\nabla f(\theta)||_2
+$$</div>
+</div>
+&rsquo; Proof of the above theorem follows directly from Cauchy-Schwartz inequality.</p>
+<h4 id="why-the-steepest-descent-direction-guarantees-decrease-">Why the steepest descent direction guarantees decrease ?</h4>
+<p>Directional derivatives describe infinitesimal behavior. We now show that sufficiently small steps in the steepest descent direction produce an actual decrease in the objective.</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<div class="thm-block proposition" id="proposition-1-1">
+  <div class="thm-title">
+    Proposition 1.1: Local Decrease along steepest descent
+  </div>
+  <div class="thm-body">Suppose $f$ is Frechet differentiable at $\theta$ and $\nabla f(\theta)\neq 0$. Let $$
+u^{*}=-\frac{\nabla f(\theta)}{||\nabla f(\theta)||_2}
+$$ Then there exists $t_0$ such that for all $t\in (0,t_0)$, $$
+f(\theta+tu^{*})&lt;f(\theta)
+$$</div>
+</div>
+ 
+
+
+<details class="proof-block" open>
+  <summary class="proof-title">Proof.</summary>
+
+  <div class="proof-body">
+    By, Frechet Differentiability, we have $$
+\begin{aligned}
+&amp; f(\theta+tu^{*})=f(\theta)+t\nabla f(\theta)^Tu^{*}+o(t)\\
+\implies &amp; f(\theta+tu^{*})=f(\theta)-t||\nabla f(\theta)||_2+o(t)
+\end{aligned}
+$$ as $\frac{o(t)}{t}$ goes to $0$ as $t\rightarrow 0$, there exist $t_0$ such that $\forall t\in (0,t_0) \enspace, |o(t)|\le \frac{t||\nabla f(\theta)||_2}{2}$ and hence the result follows.
+  </div>
+
+  <div class="proof-end">□</div>
+</details>
+</p>
+
+    </div>
+  </article>
+</main>
+
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2026 <a href="https://avi48437.github.io/">Avi | Personal Website</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu');
+    if (menu) {
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            html.dataset.theme = 'dark';
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

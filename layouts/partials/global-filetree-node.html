@@ -1,0 +1,42 @@
+<ul class="filetree-list">
+  {{ $current := .page }}
+  {{ range .nodes }}
+    {{ $isCurrent := eq $current.RelPermalink .RelPermalink }}
+    {{ $isAncestor := and (ne .RelPermalink "/") (hasPrefix $current.RelPermalink .RelPermalink) }}
+    {{ $hasChildren := or (gt (len .Sections) 0) (gt (len .RegularPages) 0) }}
+
+    <li class="filetree-item">
+      {{ if $hasChildren }}
+        <details class="filetree-folder" {{ if or $isCurrent $isAncestor }}open{{ end }}>
+          <summary class="filetree-summary">
+            <a href="{{ .RelPermalink }}" class="filetree-link {{ if $isCurrent }}active{{ end }}" onclick="event.stopPropagation();">
+              {{ .Title }}
+            </a>
+          </summary>
+
+          <div class="filetree-children">
+            {{ if gt (len .Sections) 0 }}
+              {{ partial "global-filetree-node.html" (dict "page" $current "nodes" .Sections.ByWeight) }}
+            {{ end }}
+
+            {{ if gt (len .RegularPages) 0 }}
+              <ul class="filetree-list">
+                {{ range .RegularPages.ByWeight }}
+                  <li class="filetree-item">
+                    <a href="{{ .RelPermalink }}" class="filetree-link {{ if eq $current.RelPermalink .RelPermalink }}active{{ end }}">
+                      {{ .Title }}
+                    </a>
+                  </li>
+                {{ end }}
+              </ul>
+            {{ end }}
+          </div>
+        </details>
+      {{ else }}
+        <a href="{{ .RelPermalink }}" class="filetree-link {{ if $isCurrent }}active{{ end }}">
+          {{ .Title }}
+        </a>
+      {{ end }}
+    </li>
+  {{ end }}
+</ul>

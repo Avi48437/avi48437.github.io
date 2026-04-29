@@ -1,0 +1,18 @@
+{{/* layouts/shortcodes/example.html */}}
+{{ $type := "Example" }}
+{{ $subtitle := .Get "subtitle" | default (.Get "title") | default "" }}
+{{ $sec := .Page.Scratch.Get "currentSection" | default 1 }}
+
+{{ $key := printf "exampleCounter-%d" $sec }}
+{{ $cur := .Page.Scratch.Get $key | default 0 }}
+{{ $n := add $cur 1 }}
+{{ .Page.Scratch.Set $key $n }}
+
+{{ $id := .Get "label" | default (printf "example-%d-%d" $sec $n) }}
+
+<div class="example-block" id="{{ $id }}">
+  <div class="example-title">
+    {{ $type }} {{ $sec }}.{{ $n }}{{ if $subtitle }}: {{ $subtitle }}{{ end }}
+  </div>
+  <div class="example-body">{{ .Inner | markdownify }}</div>
+</div>

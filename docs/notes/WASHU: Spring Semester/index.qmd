@@ -1,0 +1,27 @@
+---
+title: "Theory of Statistics II (WASHU Notes)"
+author:
+- name: Avinandan Roy
+engine: knitr
+date: 2026-01-10
+math: true
+katex_macros:
+  '\ind': '\operatorname{IND}'
+format:
+  hugo-md:
+    wrap: none
+    toc: false
+    code-fold: true
+bibliography: refs.bib
+citeproc: true
+link-citations: true
+reference-location: document
+nocite: '@*'
+execute:
+  echo: true
+  warning: false
+  message: false
+---
+
+### Convergence Concepts
+

@@ -39,14 +39,14 @@ In this study, there are 98 healthy human subjects involved. Other covariates ar
 The trees considered here are binary trees with roots, where one particular node is designated as the **root**, and the **level** of a node is the total number of edges along the path of the root. For example, the level of the root node is zero. Between each pair of nodes connected by an edge, the one with the higher level is the **child**, and the other is the **parent** of the child node. A node with no children is called a **leaf** node. The set of all possible rooted binary trees is called the binary tree space and is denoted by $\mathcal{T}$. 
 
 ```{r}
-#| include: false
+#| include: true
 #| label: trees
 #| fig-width: 10
 #| fig-height: 10
 #| dpi: 300
 #| fig-align: center
 #| out-width: "100%"
-#| echo: false
+#| echo: true
 library(igraph)
 
 # Main Functions to create the rooted Binary Graphs
